@@ -348,12 +348,12 @@ const SLOTS=[
  {id:'brandtab',name:'단독 브랜드탭 1번',group:'단독 브랜드탭',rate:700,w:1,imp:[200000,300000],dur:[1,1]}
 ];
 const MDS=[
- {code:'M01',team:'가상팀 A',cat:'패션의류',growth:1.18,brands:['모노라인','에버웨어','노르딕핏']},
- {code:'M02',team:'가상팀 B',cat:'패션잡화',growth:1.32,brands:['루미에르백','스텔라슈즈']},
- {code:'M03',team:'가상팀 C',cat:'축산/수산',growth:0.91,brands:['한우마루','바다향','그린팜']},
- {code:'M04',team:'가상팀 D',cat:'이미용',growth:1.07,brands:['라온뷰티','퓨어셀']},
- {code:'M05',team:'가상팀 E',cat:'가전',growth:0.84,brands:['에어홈','쿨링테크']},
- {code:'M06',team:'가상팀 F',cat:'리빙/주방',growth:1.24,brands:['홈앤코지','키친프로']}
+ {code:'7013',team:'멀티커머스팀',cat:'패션의류',growth:1.18,brands:['모노라인','에버웨어','노르딕핏']},
+ {code:'8702',team:'패션1팀',cat:'패션잡화',growth:1.32,brands:['루미에르백','스텔라슈즈']},
+ {code:'8891',team:'일반식품2팀',cat:'축산/수산',growth:0.91,brands:['한우마루','바다향','그린팜']},
+ {code:'7004',team:'뷰티1팀',cat:'이미용',growth:1.07,brands:['라온뷰티','퓨어셀']},
+ {code:'6120',team:'가전팀',cat:'가전',growth:0.84,brands:['에어홈','쿨링테크']},
+ {code:'5330',team:'리빙팀',cat:'리빙/주방',growth:1.24,brands:['홈앤코지','키친프로']}
 ];
 const BRAND_AOV={};
 MDS.forEach(m=>m.brands.forEach(b=>{BRAND_AOV[b]=Math.round(between(38000,160000)/1000)*1000;}));
