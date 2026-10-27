@@ -170,6 +170,7 @@ table.data tr.sel td{background:var(--accent-wash)}
 table.data td .nm{font-weight:600;color:var(--ink)}
 table.data td .sm{display:block;font-size:11px;color:var(--muted);font-weight:400;margin-top:1px}
 table.data tfoot td{font-weight:700;background:var(--surface-2);border-top:2px solid var(--line)}
+table.data tr.tsum td{font-weight:600;background:var(--accent-wash);position:sticky;top:33px;z-index:1}
 table.data td.wrap{white-space:normal;min-width:220px}
 .tw{overflow-x:auto}
 .scrolly{max-height:460px;overflow:auto}
@@ -307,6 +308,7 @@ table.data td.wrap{white-space:normal;min-width:220px}
     <div class="grp">예시 범위 밖 (메뉴만)</div>
     <button type="button" class="item dim" data-view="scope" data-scope="reco">추천</button>
     <button type="button" class="item dim" data-view="scope" data-scope="promo">프로모션 관리</button>
+    <button type="button" class="item dim" data-view="scope" data-scope="tools">도구 (키워드·노출 진단)</button>
     <button type="button" class="item" data-view="guide">기준 안내</button>
     <div class="spacer"></div>
     <div class="foot" id="appFoot"></div>
@@ -344,7 +346,13 @@ table.data td.wrap{white-space:normal;min-width:220px}
       </div>
 
       <section class="view" id="view-home">
-        <div class="grid2 wide">
+        <div class="card">
+          <h3>광고 성과지표 <span class="q" id="kpRange"></span><button type="button" class="btn small" id="kpCsv" style="margin-left:auto">다운로드</button></h3>
+          <div class="kpis" id="kpCards" style="grid-template-columns:repeat(3,minmax(0,1fr))"></div>
+          <div class="chart" id="kpChart" style="margin-top:10px"></div>
+          <div class="desc" style="margin-top:6px">세 지표를 각자의 최대값 기준으로 겹쳐 그린 추이입니다(세로축 없음). 점에 마우스를 올리면 실제 값이 보입니다. 지표는 카드의 선택 상자로 바꿉니다.</div>
+        </div>
+        <div class="grid2 wide" style="margin-top:12px">
           <div class="card">
             <h3>조치 필요 <span class="q" id="actAsOf"></span></h3>
             <div class="sevbox"><div class="sv"><b id="nSev">0</b><span>심각 · 바로 조치</span></div><div class="wn"><b id="nWarn">0</b><span>주의 · 확인 권장</span></div></div>
@@ -359,7 +367,18 @@ table.data td.wrap{white-space:normal;min-width:220px}
         </div>
         <div class="grid2" style="margin-top:12px">
           <div class="card">
-            <div class="tabs" id="noticeTabs"><button type="button" data-ntab="notice" aria-selected="true">공지사항</button><button type="button" data-ntab="helper" aria-selected="false">광고 도우미</button></div>
+            <h3>성과 이상 감지 <span class="q">기준일과 전주 같은 요일 비교 · ±50% 이상</span></h3>
+            <div class="tabs" id="anTabs"><button type="button" data-an="imp" aria-selected="true">노출수 <span class="pill sev" id="anImpN"></span></button><button type="button" data-an="clicks" aria-selected="false">클릭수 <span class="pill sev" id="anClkN"></span></button></div>
+            <div class="actlist" id="anList"></div>
+          </div>
+          <div class="card">
+            <h3>광고비 집중 캠페인 <span class="q">총비용 상위 · 평균 대비 지출</span><button type="button" class="more" data-go="campaign" style="margin-left:auto">전체 캠페인 보기 →</button></h3>
+            <div class="tw" id="focusTable"></div>
+          </div>
+        </div>
+        <div class="grid2" style="margin-top:12px">
+          <div class="card">
+            <div class="tabs" id="noticeTabs"><button type="button" data-ntab="notice" aria-selected="true">공지사항</button><button type="button" data-ntab="helper" aria-selected="false">광고 도우미</button><button type="button" data-ntab="alert" aria-selected="false">알림 <span class="n" id="nAlert"></span></button></div>
             <ul class="notice" id="noticeList"></ul>
           </div>
           <div class="card">
@@ -467,6 +486,7 @@ table.data td.wrap{white-space:normal;min-width:220px}
                 <label class="f">캠페인 선택<select id="bCamp"><option value="">모든 캠페인</option></select></label>
                 <label class="checks" style="font-weight:400"><input type="checkbox" id="bClickOnly" checked>클릭이 발생한 구좌만 보고서에 포함</label>
                 <button type="button" class="btn primary" id="bMake">보고서 만들기</button>
+                <button type="button" class="btn" id="bRaw" title="일별 × 광고 영역 × 캠페인 × 구좌 한 줄씩(긴 형식). 상단 기간 기준">통합 RAW 내려받기</button>
               </div>
             </div>
             <div class="card">
@@ -611,7 +631,7 @@ table.data td.wrap{white-space:normal;min-width:220px}
 (function(){
 'use strict';
 /* ---------- 앱·기준 상수: 명칭·기준일·버전은 여기서만 바꾼다 ---------- */
-const APP={name:'통합 광고센터 예시',tag:'광고센터 + 판매자 인사이트 · 개발 공유(adcenter_combined)',version:'v2.0',build:'2026-10-27'};
+const APP={name:'통합 광고센터 예시',tag:'광고센터 + 판매자 인사이트 · 개발 공유(adcenter_combined)',version:'v2.1',build:'2026-10-27'};
 const META={baseDate:'2026-06-30',pipeline:'내부 집계',priceBook:'26.08 단가표',dataKind:'가상 데이터',mock:true,source:'광고 성과 센터 v2.3 생성부(시드 20261023)',dataSha:'5796bbff008e'};
 /* ---------- 가상 데이터 생성 (시드 고정) ---------- */
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
@@ -986,10 +1006,10 @@ const state=Object.assign({},DEFAULTS,{atab:'camp',btab:'today',ntab:'notice',ch
   cSt:new Set(['on','pause','off']),cBt:new Set([0,1,2,3,4]),cOp:new Set(['광고주','대행사']),delOnly:false,cFilterOpen:false,colOpen:false,cHide:new Set(),kpiOpen:false,gx:'spend',gy:'direct',bannerOff:false,
   bType:'sales',bPer:'lw',bUnit:'campaign',bTabSel:'',bCamp:'',bClickOnly:true,reqTab:'req',reqOnly:false,requests:[],bResult:null,bilPer:'tm',bilMonth:'2026-05',bilResult:null,
   mPer:'lw',mDaily:false,mGoals:new Set(['sales','newc']),mCamp:'',mResult:null,templates:[],mDims:new Set(['month','tab']),mMets:new Set(['imp','clicks','spend','direct','roas']),
-  sbOpen:false,ruOpen:false,ruTpl:'minroas',ruLogId:0,slQty:true,slRev:true,slOpen:'',kpiSet:{sales:['spendAll','spend','direct','total','totalQty','clicks','qty','orders','roas','cvr'],newc:['spend','newc','cpa','firstRev','firstRoas','rep','repRev','allRev']}});
+  sbOpen:false,ruOpen:false,ruTpl:'minroas',ruLogId:0,slQty:true,slRev:true,slOpen:'',kp:['imp','clicks','orders'],anTab:'imp',kpiSet:{sales:['spendAll','spend','direct','total','totalQty','clicks','qty','orders','roas','cvr'],newc:['spend','newc','cpa','firstRev','firstRoas','rep','repRev','allRev']}});
 const VIEWS=['home','campaign','product','report','create','scope','guide','history','budget','rules','detail','display','sales','traffic'];
 const VIEW_TITLE={home:'광고 홈',campaign:'광고 관리',product:'상품 기회 탐색',report:'광고 보고서',create:'광고 만들기',scope:'예시 범위 밖',guide:'기준 안내',history:'변경 이력',budget:'공유 예산',rules:'자동규칙',detail:'상세페이지 관리',display:'디스플레이 광고 관리',sales:'판매 분석',traffic:'유입경로 분석'};
-const SCOPE_INFO={reco:['추천','캠페인·상품 단위로 구좌 변경·소재 교체·기간 연장을 제안하는 화면. 입찰·예산 제안이 중심인 예시와 달리 Hmall은 구좌 고정 단가라 "구좌 변경 제안"으로 다시 정의한다.'],promo:['프로모션 관리','광고와 연계한 쿠폰·행사 관리. 기존 행사 시스템과의 연동 범위를 먼저 정한다.'],category:['카테고리 분석','카테고리별 경쟁 상품·검색어·브랜드 랭킹과 Top 100 경쟁상품 유입률 비교(예시 판매자센터에서는 유료 구독 기능). Hmall 안의 카테고리 데이터만으로 만들지, 외부 데이터를 붙일지 결정 뒤 만든다.']};
+const SCOPE_INFO={reco:['추천','캠페인·상품 단위로 구좌 변경·소재 교체·기간 연장을 제안하는 화면. 입찰·예산 제안이 중심인 예시와 달리 Hmall은 구좌 고정 단가라 "구좌 변경 제안"으로 다시 정의한다.'],promo:['프로모션 관리','광고와 연계한 쿠폰·행사 관리. 기존 행사 시스템과의 연동 범위를 먼저 정한다.'],tools:['도구 (키워드 도구·전환 추적·광고 노출 진단)','검색 광고용 연관 검색어 발굴(월간 검색수·클릭률·경쟁 정도), 전환 추적 설정, 광고 노출 진단, 대량 관리 같은 광고 신청 보조 도구. 예시 광고센터 B(포털 검색광고 센터)의 구성. Hmall은 검색 광고 영역의 검색어 체계와 GA 전환 추적이 정해진 뒤 만든다(현황 시각화가 목적인 1차 범위 밖).'],category:['카테고리 분석','카테고리별 경쟁 상품·검색어·브랜드 랭킹과 Top 100 경쟁상품 유입률 비교(예시 판매자센터에서는 유료 구독 기능). Hmall 안의 카테고리 데이터만으로 만들지, 외부 데이터를 붙일지 결정 뒤 만든다.']};
 const SLOT_BY_ID={};SLOTS.forEach(s=>{SLOT_BY_ID[s.id]=s;});
 const BRANDS=[...new Set(campaigns.map(c=>c.brand))].sort((a,b)=>a.localeCompare(b,'ko'));
 
@@ -1113,10 +1133,23 @@ function comboChart(box,labels,bars,lines,opts){
   const step=Math.ceil(n/12);labels.forEach((l,i)=>{if(i%step===0||i===n-1)s+=`<text x="${(padL+i*iw+iw/2).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="10" fill="var(--muted)">${esc(l)}</text>`;});
   s+='</svg>';box.innerHTML=s;
   box._chart={labels,bars,lines,padL,padR,W,iw,n,fmtL:opts.fmtL,fmtR:opts.fmtR};
-  if(!box._hover){box._hover=true;
-    box.addEventListener('mousemove',e=>{const ch=box._chart;if(!ch)return;const r=box.getBoundingClientRect();const x=(e.clientX-r.left)/Math.max(1,r.width)*ch.W;const i=Math.floor((x-ch.padL)/ch.iw);if(i<0||i>=ch.n){hideTip();return;}
-      let h=`<b>${esc(ch.labels[i])}</b>`;ch.bars.forEach(sr=>{h+=`${esc(sr.name)} ${esc(ch.fmtL(sr.values[i]))}<br>`;});ch.lines.forEach(sr=>{h+=`${esc(sr.name)} ${esc(ch.fmtR(sr.values[i]))}<br>`;});showTip(h,e.clientX,e.clientY);});
-    box.addEventListener('mouseleave',hideTip);}
+  attachHover(box);
+}
+function attachHover(box){
+  if(box._hover)return;box._hover=true;
+  box.addEventListener('mousemove',e=>{const ch=box._chart;if(!ch)return;const r=box.getBoundingClientRect();const x=(e.clientX-r.left)/Math.max(1,r.width)*ch.W;const i=Math.floor((x-ch.padL)/ch.iw);if(i<0||i>=ch.n){hideTip();return;}
+    let h=`<b>${esc(ch.labels[i])}</b>`;ch.bars.forEach(sr=>{h+=`${esc(sr.name)} ${esc((sr.fmt||ch.fmtL)(sr.values[i]))}<br>`;});ch.lines.forEach(sr=>{h+=`${esc(sr.name)} ${esc((sr.fmt||ch.fmtR)(sr.values[i]))}<br>`;});showTip(h,e.clientX,e.clientY);});
+  box.addEventListener('mouseleave',hideTip);
+}
+/* 세로축 없는 겹침 선 그래프(지표마다 자기 최대값 기준 0~1로 정규화). 예시 광고센터 B의 성과지표 카드 방식 */
+function multiLine(box,labels,list,aria){
+  const W=900,H=230,padL=16,padR=16,padT=14,padB=28;const n=Math.max(labels.length,1),iw=(W-padL-padR)/n;
+  let s=`<svg ${SVG_ATTR} viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(aria||'성과지표 추이')}">`;
+  for(let i=0;i<=4;i++){const y=(padT+(H-padT-padB)*i/4).toFixed(1);s+=`<line x1="${padL}" x2="${W-padR}" y1="${y}" y2="${y}" stroke="var(--line-2)" stroke-dasharray="3 3"/>`;}
+  list.forEach(sr=>{const max=Math.max(1,...sr.values);const pts=sr.values.map((v,i)=>[(padL+i*iw+iw/2).toFixed(1),(padT+(H-padT-padB)*(1-v/max)).toFixed(1)]);s+=`<polyline points="${pts.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${sr.color}" stroke-width="2.5"/>`;pts.forEach(p=>{s+=`<circle cx="${p[0]}" cy="${p[1]}" r="4" fill="${sr.color}"/>`;});});
+  const step=Math.ceil(n/12);labels.forEach((l,i)=>{if(i%step===0||i===n-1)s+=`<text x="${(padL+i*iw+iw/2).toFixed(1)}" y="${H-8}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(l)}</text>`;});
+  s+='</svg>';box.innerHTML=s;
+  box._chart={labels,bars:[],lines:list,padL,padR,W,iw,n,fmtL:v=>v,fmtR:v=>fmt.cnt(v)};attachHover(box);
 }
 function donutSVG(p,color,center){const r=30,c=2*Math.PI*r;const d=Math.max(0,Math.min(1,p||0))*c;return `<svg ${SVG_ATTR} viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="${r}" fill="none" stroke="var(--surface-3)" stroke-width="12"/><circle cx="42" cy="42" r="${r}" fill="none" stroke="${color}" stroke-width="12" stroke-dasharray="${d.toFixed(2)} ${(c-d).toFixed(2)}" transform="rotate(-90 42 42)"/><text x="42" y="46" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">${esc(center||fmt.pct(p||0))}</text></svg>`;}
 function sparkSVG(vals,color){if(!vals||vals.length<2)vals=[vals&&vals[0]||0,vals&&vals[0]||0];const w=72,h=22,max=Math.max(...vals),min=Math.min(...vals);const pts=vals.map((v,i)=>`${(i/(vals.length-1)*(w-2)+1).toFixed(1)},${(h-2-(max===min?(h-4)/2:(v-min)/(max-min)*(h-4))).toFixed(1)}`).join(' ');return `<svg ${SVG_ATTR} class="spark" viewBox="0 0 ${w} ${h}" aria-hidden="true"><polyline points="${pts}" fill="none" stroke="${color||'var(--accent)'}" stroke-width="1.5"/></svg>`;}
@@ -1167,8 +1200,33 @@ const NOTICES=[
   ['점검','2026-06-15','실적 집계 반영 시각 안내: 매일 05:00 전일 접수 실적 반영(계획)'],
   ['안내','2026-06-10','구좌 위치가 궁금하면 오른쪽 위 \'광고 구좌 안내\'를 누르세요(새 창)']
 ];
+const KP_KEYS=['imp','clicks','orders','qty','direct','total','spend','newc'];
+const KP_COLORS=['#e8433a','#f0a21a','#2f8de4'];
+const KP_NAME=k=>({imp:'총 노출수',clicks:'총 클릭수',orders:'총 전환수(주문)',qty:'총 전환 판매수',direct:'총 광고 전환 매출',total:'총 전체 매출',spend:'총 집행 광고비',newc:'총 신규 구매 고객'})[k]||LABEL[k];
+function renderKpi(list,S,SP){
+  const ser=series(list,P.cur);
+  document.getElementById('kpRange').textContent=`${P.cur.from} ~ ${P.cur.to} · ${ser.bucket==='d'?'일별':'주별'} · 비교 ${P.prev.label}`;
+  document.getElementById('kpCards').innerHTML=state.kp.map((k,i)=>`<div class="tile" style="border-top:3px solid ${KP_COLORS[i]}"><div class="label"><i style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${KP_COLORS[i]}"></i><select data-kp="${i}" aria-label="지표 선택" style="background:transparent;border:0;font-weight:600;color:var(--ink-2);padding:0">${KP_KEYS.map(x=>`<option value="${x}" ${x===k?'selected':''}>${KP_NAME(x)}</option>`).join('')}</select></div><div class="value" style="color:${KP_COLORS[i]}">${M(k,S[k])}</div><div class="delta">${deltaHTML(S[k],SP[k],['total','direct','spend'].includes(k)?'money':'cnt')}</div></div>`).join('');
+  multiLine(document.getElementById('kpChart'),ser.labels,state.kp.map((k,i)=>({name:KP_NAME(k),values:ser.rows.map(r=>r[k]),color:KP_COLORS[i],fmt:v=>M(k,v)})),'광고 성과지표 추이');
+  state._kp={header:['date',...state.kp.map(KP_NAME)],rows:ser.rows.map((r,i)=>[ser.bucket==='d'?addDays(P.cur.from,i):ser.labels[i],...state.kp.map(k=>Math.round(r[k]))]),period:`조회기간 : ${P.cur.from}~${P.cur.to}`};
+}
+/* 성과 이상 감지: 기준일 값을 전주 같은 요일(7일 전)과 비교해 ±50% 이상 바뀐 운영 캠페인 */
+function anomalies(metric){
+  const d0=BASE_DATE,d1=addDays(BASE_DATE,-7);const out=[];
+  campaigns.forEach(c=>{if(!matches(c)||c.status==='off')return;const b=c.daily.find(r=>r.date===d1);if(!b||!b[metric])return;const a=c.daily.find(r=>r.date===d0);const va=a?a[metric]:0;const ch=(va-b[metric])/b[metric];if(Math.abs(ch)>=0.5)out.push({c,va,vb:b[metric],ch});});
+  return out.sort((x,y)=>Math.abs(y.ch)-Math.abs(x.ch));
+}
+function focusRows(list){const rows=list.map(c=>({c,s:sum([c])})).sort((a,b)=>b.s.spend-a.s.spend);const avg=rows.length?rows.reduce((a,r)=>a+r.s.spend,0)/rows.length:0;return {rows:rows.slice(0,3).map(r=>Object.assign(r,{over:avg?r.s.spend/avg-1:0})),avg};}
+function alertItems(){return campaigns.filter(c=>matches(c)&&c.status!=='off'&&c.reviewHold).map(c=>({c,at:`${BASE_DATE} ${pad(9+(+c.id.slice(1))%9)}:${pad((+c.id.slice(1)*7)%60)}`}));}
 function renderHome(){
   const list=rowsFor(P.cur),S=sum(list);
+  renderKpi(list,S,sum(rowsFor(P.prev)));
+  const anI=anomalies('imp'),anC=anomalies('clicks');document.getElementById('anImpN').textContent=anI.length?`이상 감지 ${anI.length}`:'정상';document.getElementById('anClkN').textContent=anC.length?`이상 감지 ${anC.length}`:'정상';
+  setTabs('anTabs','an',state.anTab);const an=state.anTab==='imp'?anI:anC;const anName=state.anTab==='imp'?'노출수':'클릭수';
+  document.getElementById('anList').innerHTML=an.length?an.slice(0,8).map(a=>`<div class="actrow"><span class="pill ${a.ch<0?'sev':'hi'}">${a.ch<0?'감소':'증가'}</span><span class="t">${esc(a.c.name)}<span class="r">${anName} <b class="${a.ch<0?'down':'up'}">전주 같은 요일 대비 ${fmt.pct1(Math.abs(a.ch))} ${a.ch<0?'감소':'증가'}</b> (${fmt.cnt(a.vb)} → ${fmt.cnt(a.va)})</span></span><button type="button" class="btn small" data-go="campaign" data-goal="${a.c.goal}" data-q="${esc(a.c.id)}">캠페인 관리</button></div>`).join(''):'<div class="empty">기준일에 전주 같은 요일 대비 ±50% 넘게 바뀐 캠페인이 없습니다.</div>';
+  const fo=focusRows(list);
+  document.getElementById('focusTable').innerHTML=fo.rows.length?`<table class="data"><thead><tr><th>캠페인 이름</th><th class="num">총비용</th><th class="num">평균 대비 지출</th><th class="num">전환율</th><th class="num">광고수익률</th></tr></thead><tbody>${fo.rows.map(({c,s,over},i)=>`<tr><td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${KP_COLORS[i]};margin-right:6px"></span>${campName(c)}</td>${td(fmt.won(s.spend),1)}${td(`<b class="${over>0?'down':'up'}">${fmt.signed(over,v=>fmt.pct(v))}</b>`,1)}${td(fmt.pct1(s.cvr),1)}${td(fmt.pct(s.roas),1)}</tr>`).join('')}</tbody></table><div class="desc" style="margin-top:6px">평균 = 선택 기간 캠페인 ${list.length}건의 캠페인당 집행 광고비 ${fmt.won(fo.avg)}</div>`:'<div class="empty">선택 기간에 집행한 캠페인이 없습니다.</div>';
+  const alerts=alertItems();document.getElementById('nAlert').textContent=`(${alerts.length})`;
   const A=actionItems();
   document.getElementById('nSev').textContent=A.sev;document.getElementById('nWarn').textContent=A.warn;
   document.getElementById('nActCamp').textContent=`(${A.camp.length})`;document.getElementById('nActSlot').textContent=`(${A.slot.length})`;
@@ -1178,7 +1236,7 @@ function renderHome(){
   setTabs('actTabs','atab',state.atab);
   renderBudget();
   setTabs('noticeTabs','ntab',state.ntab);
-  document.getElementById('noticeList').innerHTML=(state.ntab==='notice'?NOTICES.map(n=>`<li><span><span class="tag">[${n[0]}]</span>${esc(n[2])}</span><time>${n[1]}</time></li>`):helperItems().map(h=>`<li><span><span class="tag">[도우미]</span>${h}</span></li>`)).join('');
+  document.getElementById('noticeList').innerHTML=(state.ntab==='notice'?NOTICES.map(n=>`<li><span><span class="tag">[${n[0]}]</span>${esc(n[2])}</span><time>${n[1]}</time></li>`):state.ntab==='alert'?(alerts.length?alerts.map(a=>`<li><span><span class="pill sev" style="margin-right:6px">소재 보류</span>${esc(a.c.slot.tab)} 소재가 보류되었습니다. <span class="muted">${esc(a.c.id)} · ${esc(a.c.slot.name)}</span> 소재가 보류되어 광고 노출이 불가합니다. 검토 사유를 확인한 뒤 재검토 요청 또는 새 소재를 등록하세요. <button type="button" class="more" data-go="display">보류 소재 확인하기</button></span><time>${a.at}</time></li>`):['<li><span class="muted">알림이 없습니다.</span></li>']):helperItems().map(h=>`<li><span><span class="tag">[도우미]</span>${h}</span></li>`)).join('');
   const g1=sum(list.filter(c=>c.goal==='sales')),g2=sum(list.filter(c=>c.goal==='newc'));
   document.getElementById('homeDonuts').innerHTML=`<div class="donut">${donutSVG(S.spend?g1.spend/S.spend:0,'var(--accent)')}<div class="dl">매출 성장 캠페인<b>${fmt.money(g1.spend)}</b><small>집행 광고비 · 캠페인 ${g1.campaigns}건 · 광고수익률 ${fmt.pct(g1.roas)}</small></div></div><div class="donut">${donutSVG(S.spend?g2.spend/S.spend:0,'var(--accent-2)')}<div class="dl">신규 구매 고객 확보 캠페인<b>${fmt.money(g2.spend)}</b><small>집행 광고비 · 캠페인 ${g2.campaigns}건 · 신규 구매 고객 ${fmt.cnt(g2.newc)}명</small></div></div>`;
   document.getElementById('homeRange').textContent=`${P.cur.label||describeRange(P.cur)} (${P.cur.from} ~ ${P.cur.to})`;
@@ -1216,6 +1274,8 @@ function renderBudget(){
   <div class="row"><span>신규 구매 고객 확보</span><div class="track"><i class="g2" style="width:${(S.spend?g2.spend/S.spend*100:0).toFixed(1)}%"></i></div><span class="v">${fmt.money(g2.spend)}</span></div>
   <div class="row"><span>운영 캠페인 · 구좌</span><span class="muted">${S.campaigns}건 · ${new Set(list.map(c=>c.slot.id)).size}개 구좌</span><span class="v">${fmt.cnt(S.clicks)} 클릭</span></div>
   <div class="row"><span>이번 달 계약 금액</span>${bar(spent,contract)}<span class="v">${fmt.money(contract)}</span></div>
+  <div class="row"><span>전일 대비 집행</span>${(()=>{const y=sum(rowsFor({from:addDays(BASE_DATE,-1),to:addDays(BASE_DATE,-1)})).spend,t=sum(rowsFor({from:BASE_DATE,to:BASE_DATE})).spend;const r=y?t/y:0;return `<div class="track"><i style="width:${Math.min(100,r*100).toFixed(1)}%;background:${r>1?'var(--bad)':'var(--bar-2)'}"></i></div><span class="v">${fmt.pct(r)}</span>`;})()}</div>
+  <div class="cap">전일 대비 집행 = 오늘(${BASE_DATE}) 집행 광고비 ÷ 어제 집행 광고비. 100%(어제 실적)를 넘으면 붉게 표시.</div>
   <div class="cap">계약 금액 = 이번 달 시작 캠페인의 구좌 단가 × 과금 단위 합. 기준일까지 집행 ${fmt.pct(contract?spent/contract:0)}. Hmall 구좌는 기간 보장형(고정 단가)이라 일예산·입찰 개념이 없습니다.</div>`;
 }
 function setTabs(id,attr,val){const box=document.getElementById(id);const re=new RegExp(`data-${attr}="([^"]+)" aria-selected="(true|false)"`,'g');box.innerHTML=box.innerHTML.replace(re,(m,v)=>`data-${attr}="${v}" aria-selected="${v===val}"`);}
@@ -1485,7 +1545,8 @@ function renderCampaign(){
   document.getElementById('cSearch').value=state.q;
   const page=pager(document.getElementById('cPager'),rows.length,state.page,state.per,'c');state.page=page;
   const slice=rows.slice((page-1)*state.per,page*state.per);const tot=sum(rows.map(r=>r.c));
-  document.getElementById('campaignTable').innerHTML=rows.length?`<table class="data"><thead><tr>${cols.map(c=>th(c[0],c[1],c[2],c[3])).join('')}</tr></thead><tbody>${slice.map(({c,s})=>`<tr>${cols.map(col=>td(cell(col[0],c,s),col[2])).join('')}</tr>`).join('')}</tbody><tfoot><tr>${cols.map((col,i)=>i===0?'<td></td>':i===1?`<td>합계 ${rows.length}건</td>`:col[0]==='roas'?td(fmt.pct1(tot.roas),1):col[0]==='cpa'?td(tot.newc?fmt.won(tot.cpa):'—',1):col[0]==='today'?td(fmt.won(rows.reduce((a,r)=>a+todaySpend(r.c),0)),1):col[0]==='budget'?td(fmt.money(rows.reduce((a,r)=>a+r.c.contract,0)),0):col[2]&&typeof tot[col[0]]==='number'?td(M(col[0],tot[col[0]]),1):'<td></td>').join('')}</tr></tfoot></table>`:`<div class="empty">${state.delOnly?'삭제한 캠페인이 없습니다(예시에는 삭제 기능이 없습니다).':'조건에 맞는 캠페인이 없습니다. 기간·광고주·검색어·필터를 바꿔 보세요.'}</div>`;
+  const sumCells=cols.map((col,i)=>i===0?'<td></td>':i===1?`<td><b>캠페인 ${rows.length}개 결과</b><span class="sm">${filtered?'검색·필터 적용':'전체'}</span></td>`:col[0]==='roas'?td(fmt.pct1(tot.roas),1):col[0]==='cpa'?td(tot.newc?fmt.won(tot.cpa):'—',1):col[0]==='today'?td(fmt.won(rows.reduce((a,r)=>a+todaySpend(r.c),0)),1):col[0]==='budget'?td(fmt.money(rows.reduce((a,r)=>a+r.c.contract,0)),0):col[2]&&typeof tot[col[0]]==='number'?td(M(col[0],tot[col[0]]),1):'<td></td>').join('');
+  document.getElementById('campaignTable').innerHTML=rows.length?`<table class="data"><thead><tr>${cols.map(c=>th(c[0],c[1],c[2],c[3])).join('')}</tr><tr class="tsum">${sumCells}</tr></thead><tbody>${slice.map(({c,s})=>`<tr>${cols.map(col=>td(cell(col[0],c,s),col[2])).join('')}</tr>`).join('')}</tbody><tfoot><tr>${cols.map((col,i)=>i===0?'<td></td>':i===1?`<td>합계 ${rows.length}건</td>`:col[0]==='roas'?td(fmt.pct1(tot.roas),1):col[0]==='cpa'?td(tot.newc?fmt.won(tot.cpa):'—',1):col[0]==='today'?td(fmt.won(rows.reduce((a,r)=>a+todaySpend(r.c),0)),1):col[0]==='budget'?td(fmt.money(rows.reduce((a,r)=>a+r.c.contract,0)),0):col[2]&&typeof tot[col[0]]==='number'?td(M(col[0],tot[col[0]]),1):'<td></td>').join('')}</tr></tfoot></table>`:`<div class="empty">${state.delOnly?'삭제한 캠페인이 없습니다(예시에는 삭제 기능이 없습니다).':'조건에 맞는 캠페인이 없습니다. 기간·광고주·검색어·필터를 바꿔 보세요.'}</div>`;
 }
 function campaignCsv(){
   const rows=sortRows(campaignRows(state.goal));const cols=COLS[state.goal].filter(c=>c[0]!=='on'&&(FIXED_COLS.has(c[0])||!state.cHide.has(c[0])));
@@ -1506,6 +1567,7 @@ function buildReport(type,unit,tab,range,camp,clickOnly){
   const unitName={day:'일자',week:'주차',month:'월',campaign:'캠페인',slot:'구좌',tab:'광고 영역'}[unit]||'캠페인';
   return {header:[unitName,...cols.map(c=>LABEL[c])],rows:g.map(o=>[label(o.key),...cols.map(c=>metricRaw(c,o))]),cells:g.map(o=>[esc(label(o.key)),...cols.map(c=>metricCell(c,o))]),cols,unitName,total:sum(list),range,type};
 }
+function rawRows(range){range=range||P.cur;const g=groupBy(rowsFor(range),(c,r)=>[r.date,c.slot.tab,c.name,c.id,c.slot.name,GOAL[c.goal]].join('‖')).sort((a,b)=>a.key<b.key?-1:1);return {header:['일별','광고 영역','캠페인','캠페인 ID','구좌','광고 목표','노출수','클릭수','총비용','총 전환수','총 전환매출액(원)','전체 매출'],rows:g.map(o=>[...o.key.split('‖'),o.imp,o.clicks,o.spend,o.orders,o.direct,o.total]),range};}
 const PER_OPTS=()=>[['lw','지난주',PRESETS.lw()],['lm','지난달',PRESETS.lm()],['cur','기간 설정 (상단 기간 막대의 시작일~종료일)',P.cur]];
 const rangeOf=key=>key==='lw'?PRESETS.lw():key==='lm'?PRESETS.lm():P.cur;
 const radioBox=(name,attr,opts,cur)=>opts.map(o=>`<label><input type="radio" name="${name}" data-${attr}="${o[0]}" ${cur===o[0]?'checked':''}>${o[1]}${o[2]?` <span class="muted">(${o[2].from} ~ ${o[2].to})</span>`:''}</label>`).join('');
@@ -1789,6 +1851,19 @@ const TERMS2=[
   ['주간 성과 점수','목표 대비 광고수익률(신규 목표는 고객당 비용)로 0~100점. 예시 광고센터의 \'주간 예산 점수\'를 고정 단가 체계에 맞게 바꾼 것.'],
   ['진단 및 추천','조치 필요 규칙과 같은 기준으로 캠페인마다 한 줄 권고.']
 ];
+const SCREENS21=[
+  ['광고 성과지표 카드 3 + 겹침 선 그래프','홈 맨 위. 카드마다 지표를 고르면(노출·클릭·전환·판매·매출·광고비·신규 고객) 같은 색 선으로 겹쳐 그린다. 세로축 없이 각자 최대값 기준 — 추세 비교용. 다운로드는 조회기간 머리줄 + 일별 표(CSV)','센터 생성부 값 그대로','가져옴 (예시 B 대시보드)'],
+  ['성과 이상 감지','기준일 값을 전주 같은 요일과 비교해 노출수·클릭수가 ±50% 넘게 바뀐 운영 캠페인. 탭에 건수 배지, 행마다 캠페인 관리로 이동','센터 생성부 값. 임계값 50%는 초안','가져옴 (예시 B 홈)'],
+  ['광고비 집중 캠페인','선택 기간 총비용 상위 3건과 캠페인당 평균 대비 지출(+%), 전환율, 광고수익률','센터 생성부 값','가져옴 (예시 B 홈)'],
+  ['전일 대비 집행(소진율)','오늘 집행 광고비 ÷ 어제 집행 광고비 막대. 예시 B의 선불 잔액 소진율을 고정 단가 체계에 맞게 바꿈','센터 생성부 값','바꿔 가져옴'],
+  ['알림(소재 보류)','공지 카드의 알림 탭. 소재 검수 대기 캠페인을 시각과 함께 나열, 보류 소재 확인하기 → 디스플레이 광고','검수 플래그(가상)','가져옴 (예시 B 우측 알림)'],
+  ['통합 RAW 내려받기','광고 보고서 폼의 버튼. 일별 × 광고 영역 × 캠페인 × 구좌 × 목표 한 줄씩 긴 형식(노출·클릭·총비용·전환수·전환매출·전체 매출)','센터 생성부 값','가져옴 (예시 B 통합리포트 소싱처별 RAW)'],
+  ['캠페인 표 상단 요약 행','머리글 바로 아래 "캠페인 N개 결과" 합계 행(필터 적용 여부 표시), 아래 합계 행은 그대로','—','가져옴 (예시 B 전체 캠페인)']
+];
+const SKIPPED21=[['비즈머니(선불 잔액)·자동충전','Hmall 구좌는 후불 계약이라 잔액 개념이 없다'],['업종 평균 대비 광고비','다른 광고주 데이터가 필요(플랫폼만 가능)'],['PC/모바일 매체 분리','Hmall 구좌는 모바일 앱 지면뿐이라 축이 없다(데이터 계약에도 없음)'],['키워드 도구·전환 추적·노출 진단·대량 관리','광고 신청 보조 도구. 현황 시각화가 목적인 1차 범위 밖 — 범위 밖 메뉴로만'],['열마다 필터·정렬 아이콘, 캠페인 유형별 메뉴(파워링크·쇼핑검색…)','표 열 설정·정렬로 대체. 유형 메뉴는 Hmall의 영역 필터와 같은 역할'],['광고 집행 전·지출 한도 도달 같은 세부 상태','데이터에 미래 캠페인·한도가 없어 상태 3종 유지']];
+function guide21HTML(){
+  return `<div class="card" style="margin-top:12px"><h3>v2.1에서 더한 것 <span class="q">예시 광고센터 B(포털 검색광고 센터) 벤치마킹 — 현황을 직관적으로 보여주는 요소만</span></h3><div class="tw"><table class="data"><thead><tr><th>요소</th><th>내용</th><th>데이터</th><th>출처</th></tr></thead><tbody>${SCREENS21.map(s=>`<tr><td><b>${esc(s[0])}</b></td><td class="wrap">${esc(s[1])}</td><td class="wrap">${esc(s[2])}</td><td>${esc(s[3])}</td></tr>`).join('')}</tbody></table></div><div class="desc" style="margin-top:8px"><b>반영하지 않은 것과 이유</b></div><div class="tw"><table class="data"><tbody>${SKIPPED21.map(s=>`<tr><td><b>${esc(s[0])}</b></td><td class="wrap">${esc(s[1])}</td></tr>`).join('')}</tbody></table></div></div>`;
+}
 function guide2HTML(){
   return `<div class="card" style="margin-top:12px"><h3>v2.0에서 더한 화면 <span class="q">광고센터 + 판매자 인사이트 통합(adcenter_combined)</span></h3><div class="desc">예시 광고센터의 추가 자료(광고 관리·상품 기회 탐색·광고 보고서·자동규칙·공유예산·변경 이력·상세페이지·디스플레이 광고)와 예시 판매자센터(판매 분석·유입경로 분석)를 Hmall 구좌·조직·브랜드로 옮겼다. 표의 '원천'이 가상이면 개발 시 데이터 정의가 먼저다.</div><div class="tw"><table class="data"><thead><tr><th>화면</th><th>보여주는 것</th><th>예시의 데이터 원천</th><th>개발 시 결정</th></tr></thead><tbody>${SCREENS2.map(s=>`<tr><td><b>${esc(s[0])}</b></td><td class="wrap">${esc(s[1])}</td><td class="wrap">${esc(s[2])}</td><td class="wrap">${esc(s[3])}</td></tr>`).join('')}</tbody></table></div></div>
   <div class="card guide" style="margin-top:12px"><h3>용어 <span class="q">예시 광고센터 툴팁을 Hmall 기준으로 옮김</span></h3><dl>${TERMS2.map(t=>`<dt>${esc(t[0])}</dt><dd>${esc(t[1])}</dd>`).join('')}</dl></div>
@@ -1816,6 +1891,7 @@ function serialize(){
   if(state.bil!=='day')add('bil',state.bil);
   if(state.view==='scope')add('sc',state.scope);
   if(state.htab!=='reco')add('ht',state.htab);
+  if(state.kp.join(',')!=='imp,clicks,orders')add('kp',state.kp.join(','));
   if(state.hType!=='all')add('ct',state.hType);if(state.hCamp)add('hc',state.hCamp);if(state.hMetric!==DEFAULTS.hMetric)add('hm',state.hMetric);
   if(state.trTab!=='in')add('tt',state.trTab);if(state.slTab!=='all')add('sl',state.slTab);if(state.slSort!=='rev')add('ss',state.slSort);if(state.dpStatus)add('dp',state.dpStatus);if(state.cat)add('cat',state.cat);if(state.rtype!=='kw')add('rtype',state.rtype);
   return q.toString();
@@ -1841,6 +1917,7 @@ function parseHash(h){
   s.bil=g('bil')==='month'?'month':'day';
   s.scope=SCOPE_INFO[g('sc')]?g('sc'):'reco';
   s.htab=g('ht')==='camp'?'camp':'reco';
+  {const kp=(g('kp')||'').split(',');s.kp=kp.length===3&&kp.every(x=>KP_KEYS.includes(x))?kp:['imp','clicks','orders'];}
   s.hType=CHANGE_TYPES.includes(g('ct'))?g('ct'):'all';s.hCamp=g('hc')&&CAMP_BY_ID[g('hc')]?g('hc'):'';s.hMetric=['total','direct','spend','roas'].includes(g('hm'))?g('hm'):'direct';
   s.trTab=['in','out','partner'].includes(g('tt'))?g('tt'):'in';s.slTab=['all','sold','none'].includes(g('sl'))?g('sl'):'all';s.slSort=['rev','qty','visit','cvr'].includes(g('ss'))?g('ss'):'rev';s.dpStatus=['운영 중','임시저장','검수 중'].includes(g('dp'))?g('dp'):'';
   s.cat=g('cat')&&products.some(p=>p.cat===g('cat'))?g('cat'):'';s.rtype=['kw','prod','reach','custom','tpl'].includes(g('rtype'))?g('rtype'):'kw';
@@ -1902,7 +1979,15 @@ on('noticeTabs','click','button[data-ntab]',t=>{state.ntab=t.dataset.ntab;render
 on('homeTabs','click','button[data-htab]',t=>{state.htab=t.dataset.htab;render();});
 on('actList','click','button[data-go]',goFrom);
 on('homeTabBody','click','button[data-go]',goFrom);
+on('view-home','click','h3 button[data-go]',goFrom);
 document.getElementById('homeMore').addEventListener('click',()=>go('report',{rtab:'auto'}));
+on('kpCards','change','select[data-kp]',t=>{state.kp[+t.dataset.kp]=KP_KEYS.includes(t.value)?t.value:state.kp[+t.dataset.kp];render();});
+document.getElementById('kpCsv').addEventListener('click',()=>{const k=state._kp;if(k)download(`광고_성과_지표_${P.cur.from}_${P.cur.to}.csv`,'text/csv','\uFEFF'+csv([[k.period],k.header,...k.rows]));toast('광고 성과지표 일별 표를 저장했습니다');});
+on('anTabs','click','button[data-an]',t=>{state.anTab=t.dataset.an;render();});
+on('anList','click','button[data-go]',goFrom);
+on('focusTable','click','button[data-go]',goFrom);
+on('noticeList','click','button[data-go]',goFrom);
+document.getElementById('bRaw').addEventListener('click',()=>{const r=rawRows();saveCsv(`통합리포트_RAW_${r.range.from}_${r.range.to}.csv`,r.header,r.rows);});
 function resetCampaignFilters(){state.q='';state.cSt=new Set(['on','pause','off']);state.cBt=new Set([0,1,2,3,4]);state.cOp=new Set(['광고주','대행사']);state.delOnly=false;state.page=1;}
 on('goalTabs','click','button[data-goal]',t=>{state.goal=t.dataset.goal;state.page=1;render();});
 document.getElementById('cSearch').addEventListener('input',e=>{state.q=e.target.value;state.page=1;render();});
@@ -2032,11 +2117,11 @@ document.getElementById('alertText').textContent=`이 화면의 수치는 가상
 document.getElementById('verInfo').textContent=`화면 ${APP.version} (${APP.build} 빌드) · 데이터 기준일 ${META.baseDate} · 데이터 구분: ${META.dataKind} · 지표 정의와 링크 규칙은 '기준 안내'`;
 document.getElementById('fBrand').innerHTML='<option value="">광고주 전체 (관리자 보기)</option>'+BRANDS.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
 document.getElementById('bTab').innerHTML='<option value="">전체</option>'+TAB_ORDER.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
-document.getElementById('view-guide').innerHTML=guideHTML()+guide2HTML();
+document.getElementById('view-guide').innerHTML=guideHTML()+guide2HTML()+guide21HTML();
 applyHash();
 render();
 })();
 </script>
-<!-- 공개용 게시본 v2.0 (2026-10-27) -->
+<!-- 공개용 게시본 v2.1 (2026-10-27) -->
 </body>
 </html>
