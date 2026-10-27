@@ -243,6 +243,60 @@ tr.noexec td{color:var(--muted)}
 .shot-metrics.empty{display:flex;align-items:center;gap:8px;min-height:32px;font-size:12px}
 #fSlot:disabled{opacity:.45}
 @media (max-width:860px){.shot-detail{grid-template-columns:1fr}.shot-groups{grid-template-columns:repeat(2,minmax(0,1fr))}.shot-facts{grid-template-columns:repeat(2,minmax(0,1fr))}.shot-facts>div:nth-child(3){border-left:0}.shot-facts>div:nth-child(n+3){border-top:1px solid var(--line)}}
+/* v2.4 성과 시각화: 지표 함께 보기 · 광고비 집중 구좌 · 성과 변동 감지 · 기간 바로 선택 · 내려받기 · 합계 행 · 지표 도움말 */
+:root{--s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--s1:#3987e5;--s2:#d95926;--s3:#199e70}}
+:root[data-theme="dark"]{--s1:#3987e5;--s2:#d95926;--s3:#199e70}
+.btn.sm{padding:4px 10px;font-size:12px;border-radius:7px}
+.kp-card{padding:12px 16px 14px}
+.kp-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.kp-picks{display:flex;flex-wrap:wrap;gap:8px}
+.kp-pick{display:inline-flex;align-items:center;gap:7px;padding:3px 6px 3px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2)}
+.kp-pick i{display:inline-block;width:16px;height:3px;border-radius:2px}
+.kp-pick select{background:transparent;border:0;font-weight:600;color:var(--ink);padding:3px 0;font-size:13px}
+.kp-act{display:flex;gap:6px;align-items:center}
+#kpChart svg{display:block;width:100%;height:auto}
+#kpChart .tw{max-height:300px;overflow:auto}
+.kp-legend{display:flex;flex-wrap:wrap;gap:6px 18px;font-size:12px;color:var(--ink-2);margin-top:8px}
+.kp-legend span{display:inline-flex;align-items:center;gap:6px}
+.kp-legend i{display:inline-block;width:16px;height:3px;border-radius:2px}
+.kp-legend b{color:var(--ink);font-variant-numeric:tabular-nums}
+.fx-list,.an-list{display:flex;flex-direction:column;gap:4px}
+.fx-row,.an-row{display:grid;align-items:center;gap:10px;width:100%;padding:7px 8px;border:1px solid transparent;border-radius:8px;background:none;text-align:left;font-size:12px;color:var(--ink-2)}
+.fx-row{grid-template-columns:minmax(0,128px) minmax(0,1fr) 96px}
+.an-row{grid-template-columns:minmax(0,128px) minmax(0,1fr) minmax(0,150px) 62px}
+.fx-row:hover,.an-row:hover{background:var(--surface-2);border-color:var(--line)}
+.fx-row .nm,.an-row .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--ink);font-weight:600}
+.fx-bars,.an-bars{display:flex;flex-direction:column;gap:3px;min-width:0}
+.fx-bar{display:grid;grid-template-columns:minmax(0,1fr) 46px;gap:6px;align-items:center;font-variant-numeric:tabular-nums}
+.fx-bar .trk,.an-bars .trk{height:7px;position:relative}
+.fx-bar .t,.an-bars .t{position:absolute;left:0;top:0;height:7px;border-radius:0 4px 4px 0;min-width:2px}
+.an-bars .t{background:var(--accent)}
+.an-bars .t.prev{background:var(--prev)}
+.fx-bar span:last-child{text-align:right}
+.fx-roas{text-align:right;font-variant-numeric:tabular-nums;display:flex;flex-direction:column;gap:1px}
+.fx-roas b{color:var(--ink);font-size:13px}
+.fx-roas small{font-size:11px}
+.an-v{font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.an-v b{color:var(--ink)}
+.an-c{text-align:right;font-weight:650;font-variant-numeric:tabular-nums}
+.an-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.an-tabs button{padding:4px 11px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:12px;font-weight:600;color:var(--ink-2)}
+.an-tabs button b{margin-left:3px;font-variant-numeric:tabular-nums}
+.an-tabs button[aria-selected="true"]{border-color:var(--accent);color:var(--accent);background:var(--accent-wash)}
+.badge-n{display:inline-block;margin-left:6px;padding:0 8px;border-radius:999px;background:var(--accent-wash);color:var(--accent);font-size:11px;font-weight:700;line-height:18px;vertical-align:1px}
+.badge-n:empty{display:none}
+.an-empty{padding:14px 8px;color:var(--muted);font-size:12.5px}
+.presets{display:flex;flex-wrap:wrap;gap:4px;align-self:flex-end}
+.presets button{padding:6px 9px;border:1px solid var(--line);border-radius:7px;background:var(--surface);font-size:12px;color:var(--ink-2)}
+.presets button:hover{background:var(--surface-2)}
+.presets button[aria-pressed="true"]{border-color:var(--accent-soft);color:var(--accent);background:var(--accent-wash);font-weight:600}
+.tablebar .acts{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tablebar.end{justify-content:flex-end}
+tr.tsum td{background:var(--surface-2);font-weight:650;border-bottom:1px solid var(--line)}
+tr.tsum td.flat{font-weight:500;font-size:11.5px}
+.tile .label .q{display:inline-grid;place-items:center;width:15px;height:15px;margin-left:5px;border-radius:50%;border:1px solid var(--line);font-size:10px;font-weight:600;color:var(--muted);cursor:help;vertical-align:1px}
+@media (max-width:860px){.fx-row{grid-template-columns:minmax(0,90px) minmax(0,1fr) 84px}.an-row{grid-template-columns:minmax(0,90px) minmax(0,1fr) 56px}.an-row .an-v{display:none}}
 </style>
 </head>
 <body>
@@ -250,7 +304,7 @@ tr.noexec td{color:var(--muted)}
 <div class="app">
   <aside class="nav">
     <div class="brand"><span id="appName">광고 성과 센터</span><small id="appTag">모바일 광고 구좌 성과 조회</small></div>
-    <span class="badge" id="appBadge">가상 데이터 · 목업 v2.1</span>
+    <span class="badge" id="appBadge">가상 데이터 · 목업 v2.4</span>
     <button type="button" data-view="home" aria-current="page">광고 요약</button>
     <button type="button" data-view="md">MD별 성과</button>
     <button type="button" data-view="campaign">캠페인(배너)</button>
@@ -278,6 +332,7 @@ tr.noexec td{color:var(--muted)}
     <div class="filters" id="filters">
       <label>시작일 (접수일자)<input type="date" id="fFrom" min="2025-01-01" max="2026-06-30"></label>
       <label>종료일 (접수일자)<input type="date" id="fTo" min="2025-01-01" max="2026-06-30"></label>
+      <div class="presets" id="fPresets" role="group" aria-label="기간 바로 선택"></div>
       <label>비교 기간<select id="fCmp"></select></label>
       <label id="lCFrom" hidden>비교 시작일<input type="date" id="fCFrom" min="2024-01-01" max="2026-06-30"></label>
       <label id="lCTo" hidden>비교 종료일<input type="date" id="fCTo" min="2024-01-01" max="2026-06-30"></label>
@@ -299,6 +354,16 @@ tr.noexec td{color:var(--muted)}
     <!-- 홈 -->
     <section class="view" id="view-home">
       <div class="kpis" id="kpis"></div>
+
+      <div class="section-title"><h2>지표 함께 보기</h2><span class="hint">고른 지표 3개를 선택 기간 평균 = 100으로 맞춰 한 그래프에 겹칩니다. 선의 높이는 평균 대비 수준이고, 점에 마우스를 올리면 실제 값이 보입니다.</span></div>
+      <div class="card kp-card">
+        <div class="kp-head"><div class="kp-picks" id="kpPicks"></div><div class="kp-act"><button type="button" class="btn sm" id="kpTable">표로 보기</button><button type="button" class="btn sm" id="kpCsv">CSV 내려받기</button></div></div>
+        <div id="kpChart"></div>
+      </div>
+      <div class="grid2" style="margin-top:12px">
+        <div class="card"><h3>광고비 집중 구좌</h3><div class="desc" id="focusDesc"></div><div id="focusList"></div></div>
+        <div class="card"><h3>성과 변동 감지<span class="badge-n" id="anBadge"></span></h3><div class="desc" id="anDesc"></div><div class="an-tabs" id="anTabs" role="tablist" aria-label="변동 지표"></div><div id="anList"></div></div>
+      </div>
 
       <div class="section-title"><h2>광고 구좌별 성과 비교</h2><span class="hint">막대 = 전체 매출(선택 기간), 가는 막대 = <span data-cmp>전년 동월</span>. 구좌 단위로만 비교하세요(구좌 간 합산 금지).</span></div>
       <div class="grid2">
@@ -322,7 +387,7 @@ tr.noexec td{color:var(--muted)}
     <!-- MD -->
     <section class="view" id="view-md" hidden>
       <div class="section-title"><h2>MD → 브랜드 → 광고 구좌</h2><span class="hint">행을 누르면 펼쳐집니다. 신장률은 전체 매출의 <span data-cmp>전년 동월</span> 대비.</span></div>
-      <div class="card"><div class="tw"><table class="data" id="mdTree"></table></div></div>
+      <div class="card"><div class="tablebar end"><span class="acts"><button type="button" class="btn sm" id="mdCsv">CSV 내려받기</button></span></div><div class="tw"><table class="data" id="mdTree"></table></div></div>
     </section>
 
     <!-- 캠페인 -->
@@ -331,7 +396,7 @@ tr.noexec td{color:var(--muted)}
       <div class="card">
         <div class="tablebar">
           <input type="search" id="cSearch" placeholder="전시명 · 브랜드 검색" aria-label="캠페인 검색" maxlength="40">
-          <span class="count" id="cCount"></span>
+          <span class="acts"><span class="count" id="cCount"></span><button type="button" class="btn sm" id="cCsv">CSV 내려받기</button><button type="button" class="btn sm" id="cRaw" title="일자 × 캠페인 긴 형식(데이터 계약 열 이름)">일별 RAW</button></span>
         </div>
         <div class="tw"><table class="data" id="campaignTable"></table></div>
         <button type="button" class="btn more" id="cMore" hidden>더 보기</button>
@@ -341,7 +406,7 @@ tr.noexec td{color:var(--muted)}
     <!-- 구좌 -->
     <section class="view" id="view-slot" hidden>
       <div class="section-title"><h2>광고 구좌 비교</h2><span class="hint">단가는 26.08 광고상품 단가표 기준(만원/일). 12시간·1시간·7일·1회 발송 단위 구좌는 표의 '단위'를 따르고, 10/40처럼 구간 단가인 구좌는 목업에서 최고 구간으로 계산합니다. 단가표에 없는 구좌는 목록에 없습니다.</span></div>
-      <div class="card"><div class="tw"><table class="data" id="slotTable"></table></div></div>
+      <div class="card"><div class="tablebar end"><span class="acts"><button type="button" class="btn sm" id="sCsv">CSV 내려받기</button></span></div><div class="tw"><table class="data" id="slotTable"></table></div></div>
     </section>
 
     <!-- 구좌별 현황 -->
@@ -368,6 +433,12 @@ tr.noexec td{color:var(--muted)}
           <dt>합계 보는 법 <span class="tag plan">계획</span></dt><dd>같은 상품이 여러 구좌에 동시에 노출되면 구좌별 전체 매출은 각각 독립적으로 집계되므로, 구좌별 값을 더한 금액과 상단 합계는 다를 수 있습니다. 상단 합계는 매장ID·판매상품코드·접수일자 기준으로 중복을 제거한 값으로 표시할 예정입니다. 목업은 중복이 없는 가상 데이터를 그대로 합산합니다.</dd>
           <dt>날짜 기준 <span class="tag fix">확정</span></dt><dd>추출은 접수일자, 배너 귀속은 주문일자 ≥ 전시시작일 하한 가드를 적용합니다. 취소·반품은 접수된 날에 반영합니다. 전시 시작 이전에 주문된 건의 취소·반품은 전체 매출에서 제외하고, 전시 시작 이후 주문의 취소·반품은 정상 판매 사이클로 보아 반영하므로 반품이 많은 배너는 전체 매출이 낮거나 일부 마이너스로 보일 수 있습니다.</dd>
           <dt>광고 배너 범위 <span class="tag fix">확정</span></dt><dd>광고여부가 "Y/AD"인 배너만 포함합니다.</dd>
+          <dt>지표 함께 보기</dt><dd>광고 요약에서 고른 지표 3개(전체 매출·직접 매출·집행 광고비·ROAS·클릭수·직접 기여율·클릭당 비용)를 선택 기간 평균 = 100인 지수로 바꿔 한 그래프에 겹칩니다. 금액·건수는 구간 평균, 비율(ROAS·직접 기여율·클릭당 비용)은 기간 전체 값이 100입니다. 단위가 다른 지표가 함께 오르내리는지 보기 위한 것이며, 실제 값은 점에 마우스를 올리거나 '표로 보기'로 봅니다. 구간은 추이 차트와 같이 62일 이하 일별, 400일 이하 주별, 그 이상 월별입니다.</dd>
+          <dt>광고비 집중 구좌</dt><dd>선택 기간 집행 광고비 상위 5개 광고 구좌(필터의 구좌 묶음 단위)의 광고비 비중과 전체 매출 비중, ROAS를 보입니다. ROAS 아래 값은 전체 ROAS 대비 퍼센트포인트 차이입니다. 광고비 비중이 매출 비중보다 크면 평균보다 효율이 낮은 구좌입니다. 실데이터에서는 구좌 간 전체 매출 중복을 제거하기 전이라 매출 비중의 합이 100%와 다를 수 있습니다. 항목을 누르면 광고 구좌 필터가 그 구좌로 걸립니다.</dd>
+          <dt>성과 변동 감지 <span class="tag chk">확인 필요</span></dt><dd>선택 기간 종료일 기준 최근 7일과 그 앞 7일을 광고 구좌별로 비교해 전체 매출 또는 클릭수가 50% 이상 늘거나 준 구좌를 변동이 큰 순으로 보입니다. 두 기간 모두 집행한 구좌만 대상이며 팀·MD·브랜드·광고 구좌 필터가 적용됩니다. 임계값(50%)과 비교 기준(앞 7일, 또는 전주 같은 요일)은 초안이라 확정이 필요합니다. 노출수는 측정이 시작되면 추가합니다. 항목을 누르면 그 구좌로 좁힌 캠페인 목록이 열립니다.</dd>
+          <dt>기간 바로 선택</dt><dd>필터의 이번 달·지난달·최근 7일·최근 31일·지난주(월~일) 버튼은 데이터 기준일(2026-06-30) 기준으로 시작일·종료일을 채웁니다. 고른 기간은 시작일·종료일로 고른 것과 같게 링크에 기록됩니다.</dd>
+          <dt>CSV 내려받기</dt><dd>지표 함께 보기, MD별 성과(MD × 브랜드 × 광고 구좌 전부, 펼침과 무관), 캠페인 목록(검색·정렬 적용, 더 보기로 숨은 행 포함), 광고 구좌 비교 표를 엑셀에서 바로 열리는 CSV(UTF-8)로 내려받습니다. 첫 줄에 조회기간·비교 기간·필터를 적습니다. 캠페인 화면의 '일별 RAW'는 일자 × 캠페인 긴 형식이며 열 이름은 파이프라인 데이터 계약(campaign_daily)과 같습니다(노출수는 미측정이라 없고, 클릭수는 가상 값). 파일은 화면 안에서 만들어지며 서버로 보내지 않습니다.</dd>
+          <dt>합계 행과 지표 도움말</dt><dd>캠페인 표 맨 위 줄은 검색·필터에 맞는 캠페인 전체(더 보기로 숨은 행 포함)의 합계입니다. 요약 타일의 ? 에 마우스를 올리면 지표 정의가 보입니다.</dd>
           <dt>구좌별 현황의 화면 예시</dt><dd>'구좌별 현황' 탭은 광고 구좌 안내 페이지(오른쪽 위 '광고 구좌 안내' 버튼)와 같은 순서로 영역 → 구좌 → 위치를 골라 봅니다. 그림은 안내 페이지의 앱 화면 캡처에서 구좌 주변만 잘라 넣은 것이고(탭 광고 2개는 탭 줄이 보이는 별도 캡처), 점선 상자가 해당 구좌의 위치입니다. 구좌 위치를 보여주기 위한 예시이며 선택 기간의 실제 노출 소재가 아닙니다. 메시지, 카테고리, 백화점 투뎁스, 쇼라 방송 광고, 슬라이딩 배너 구좌는 이 탭에 없습니다(다른 화면과 필터에는 그대로 있습니다). 이 탭의 수치에는 팀·MD·브랜드·기간 필터만 적용되고 광고 구좌 필터는 적용되지 않습니다.</dd>
         </dl>
         <div class="note">이 화면은 가상 데이터로 만든 목업입니다. 실제 수치가 아니며, 화면 구조와 지표 정의를 검토하기 위한 용도입니다.</div>
@@ -375,7 +446,7 @@ tr.noexec td{color:var(--muted)}
       <div class="section-title"><h2>링크 공유와 화면 갱신</h2></div>
       <div class="card">
         <dl>
-          <dt>링크에 담기는 내용</dt><dd>보고 있는 화면, 기간, 팀·MD·브랜드·광고 구좌 선택, 캠페인 검색어와 정렬, 펼쳐 둔 MD 행이 주소 뒤쪽(#)에 기록됩니다. 구좌별 현황에서 고른 구좌도 함께 기록됩니다. 주소창의 주소를 그대로 복사해 공유하면 같은 화면이 열립니다. 오른쪽 위 '광고 구좌 안내'는 구좌 위치를 보여주는 안내 페이지를 새 창으로 엽니다.</dd>
+          <dt>링크에 담기는 내용</dt><dd>보고 있는 화면, 기간, 팀·MD·브랜드·광고 구좌 선택, 캠페인 검색어와 정렬, 펼쳐 둔 MD 행이 주소 뒤쪽(#)에 기록됩니다. 구좌별 현황에서 고른 구좌, 광고 요약의 '지표 함께 보기'에서 고른 지표와 '성과 변동 감지' 탭도 함께 기록됩니다. 주소창의 주소를 그대로 복사해 공유하면 같은 화면이 열립니다. 오른쪽 위 '광고 구좌 안내'는 구좌 위치를 보여주는 안내 페이지를 새 창으로 엽니다.</dd>
           <dt>수정 반영 방식 <span class="tag plan">계획</span></dt><dd>링크는 웹 서버의 주소입니다. 같은 위치의 화면 파일이나 데이터 파일을 교체하면 링크는 그대로이고, 서버가 열 때마다 최신 파일을 확인하도록 설정되어 있으면 새로고침만으로 새 내용이 보입니다. 이 목업을 내 PC에서 파일로 열었을 때는 내 PC 경로가 복사되므로, 사내 웹 주소에 게시한 뒤에 팀원에게 공유할 수 있습니다.</dd>
           <dt>화면 버전 · 기준일</dt><dd id="verInfo"></dd>
         </dl>
@@ -390,7 +461,7 @@ tr.noexec td{color:var(--muted)}
 (function(){
 'use strict';
 /* ---------- 앱·기준 상수: 명칭·기준일·버전은 여기서만 바꾼다 (운영 시 meta.json 값으로 대체 예정) ---------- */
-const APP={name:'광고 성과 센터',tag:'모바일 광고 구좌 성과 조회',version:'v2.3',build:'2026-10-26'};
+const APP={name:'광고 성과 센터',tag:'모바일 광고 구좌 성과 조회',version:'v2.4',build:'2026-10-27'};
 const META={baseDate:'2026-06-30',pipeline:'내부 집계',priceBook:'26.08 단가표',dataKind:'가상 데이터',mock:true};
 /* ---------- 가상 데이터 생성 (시드 고정) ---------- */
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
@@ -643,7 +714,7 @@ const campaigns=[];let cid=1;
 /* ---------- 상태 ---------- */
 /* period: 'YYYY-MM'(월) | 'YYYY-Qn'(분기) | 'YYYY'(연도) | 'YYYY-MM-DD~YYYY-MM-DD'(기간 직접 입력, 접수일자 between)
    cmp: 'py'(전년 동기, 기본) | 'pp'(직전 기간) | 'YYYY-MM-DD~YYYY-MM-DD'(직접 입력) */
-const state={period:'2026-06',cmp:'py',team:'',md:'',brand:'',slot:'',view:'home',cSort:{key:'total',dir:-1},cLimit:15,cQuery:'',shot:''};
+const state={period:'2026-06',cmp:'py',team:'',md:'',brand:'',slot:'',view:'home',cSort:{key:'total',dir:-1},cLimit:15,cQuery:'',shot:'',kp:['total','spend','roas'],an:'total',kpTbl:false};
 const BASE_DATE=META.baseDate;
 const DEFAULTS={view:'home',period:'2026-06',cmp:'py',sortKey:'total',sortDir:-1};
 const VIEWS=['home','md','campaign','slot','shot','guide'];
@@ -932,6 +1003,7 @@ function renderPeriodControls(){
   document.getElementById('fCFrom').value=P.prev.from;document.getElementById('fCTo').value=P.prev.to;
   show('lCFrom',cm==='cu');show('lCTo',cm==='cu');
   document.getElementById('cmpLabel').textContent=`비교 기간: ${describeRange(P.prev)} (${cmpWord()})`;
+  renderPresets();
 }
 /* 검색형 목록: datalist 에 옵션을 채우고 입력칸에는 현재 선택을 보여 준다. 묶음 없이 평평한 목록이다. */
 const mdLabel=m=>`${m.code} · ${m.team} · ${m.cat}`;
@@ -963,7 +1035,7 @@ function renderKPIs(curList,prevList){
   const none=c.campaigns===0;
   const box=document.getElementById('kpis');box.innerHTML='';
   tiles.forEach(t=>{const d=document.createElement('div');d.className='tile';
-    d.innerHTML=`<div class="label">${t.label}</div><div class="value">${none?NONE:t.v}</div><div class="delta">${none?`<span class="flat">${cmpWord()} 집행 ${p.campaigns}건</span>`:t.d}</div>${t.extra&&!none?`<div class="delta"><span class="amt">${t.extra}</span></div>`:''}`;
+    d.innerHTML=`<div class="label">${t.label}${helpQ(t.label)}</div><div class="value">${none?NONE:t.v}</div><div class="delta">${none?`<span class="flat">${cmpWord()} 집행 ${p.campaigns}건</span>`:t.d}</div>${t.extra&&!none?`<div class="delta"><span class="amt">${t.extra}</span></div>`:''}`;
     d.appendChild(sparkline(t.cur,t.prev));box.appendChild(d);});
   return {c,p,ds,dp};
 }
@@ -1032,11 +1104,10 @@ function campaignRows(){
 function renderCampaigns(){
   const t=document.getElementById('campaignTable');
   const key=state.cSort.key,dir=state.cSort.dir;
-  const val=r=>key==='name'?r.c.name:key==='brand'?r.c.brand:key==='md'?r.c.md.code:key==='slot'?r.c.slot.name:key==='start'?r.c.start:key==='end'?r.c.end:r.s[key];
-  const rows=campaignRows().sort((a,b)=>{const x=val(a),y=val(b);return (x>y?1:x<y?-1:0)*dir;});
+  const rows=campaignSorted();
   const show=rows.slice(0,state.cLimit);
   const th=(k,l,num)=>`<th class="sortable${num?' num':''}" data-key="${k}">${l}${key===k?(dir>0?' ↑':' ↓'):''}</th>`;
-  t.innerHTML=`<thead><tr>${th('name','캠페인(전시명)')}${th('brand','브랜드')}${th('md','MD')}${th('slot','광고 구좌')}<th>상태</th>${th('start','시작일')}${th('end','종료일')}${th('spend','광고비',1)}${th('total','전체 매출',1)}${th('direct','직접 매출',1)}${th('roas','ROAS',1)}${th('clicks','클릭수',1)}</tr></thead><tbody>${!show.length?EMPTYROW:show.map(r=>`<tr><td>${esc(r.c.name)}</td><td>${esc(r.c.brand)}</td><td>${r.c.md.code}</td><td>${esc(r.c.slot.name)}</td><td><span class="pill ${r.status==='활성'?'on':'off'}">${r.status}</span></td><td>${r.c.start}</td><td>${r.c.end}</td><td class="num">${fmt.money(r.s.spend)}</td><td class="num">${fmt.money(r.s.total)}</td><td class="num">${fmt.money(r.s.direct)}</td><td class="num">${fmt.pct(r.s.roas)}</td><td class="num">${fmt.cnt(r.s.clicks)}</td></tr>`).join('')}</tbody>`;
+  t.innerHTML=`<thead><tr>${th('name','캠페인(전시명)')}${th('brand','브랜드')}${th('md','MD')}${th('slot','광고 구좌')}<th>상태</th>${th('start','시작일')}${th('end','종료일')}${th('spend','광고비',1)}${th('total','전체 매출',1)}${th('direct','직접 매출',1)}${th('roas','ROAS',1)}${th('clicks','클릭수',1)}</tr></thead><tbody>${!show.length?EMPTYROW:sumRow(rows)+show.map(r=>`<tr><td>${esc(r.c.name)}</td><td>${esc(r.c.brand)}</td><td>${r.c.md.code}</td><td>${esc(r.c.slot.name)}</td><td><span class="pill ${r.status==='활성'?'on':'off'}">${r.status}</span></td><td>${r.c.start}</td><td>${r.c.end}</td><td class="num">${fmt.money(r.s.spend)}</td><td class="num">${fmt.money(r.s.total)}</td><td class="num">${fmt.money(r.s.direct)}</td><td class="num">${fmt.pct(r.s.roas)}</td><td class="num">${fmt.cnt(r.s.clicks)}</td></tr>`).join('')}</tbody>`;
   document.getElementById('cCount').textContent=rows.length?`${rows.length}건 중 1~${Math.min(show.length,rows.length)}건`:'0건';
   document.getElementById('cMore').hidden=show.length>=rows.length;
   t.querySelectorAll('th.sortable').forEach(h=>h.addEventListener('click',()=>{const k=h.dataset.key;if(state.cSort.key===k)state.cSort.dir*=-1;else state.cSort={key:k,dir:k==='name'||k==='brand'||k==='md'||k==='slot'?1:-1};renderCampaigns();writeHash(false);}));
@@ -1088,6 +1159,173 @@ function renderShots(curList,prevList){
   </div>`;
 }
 
+/* ---------- v2.4 성과 시각화 (예시 광고센터 인사이트 반영, 기존 화면 안에만 추가) ---------- */
+/* 지표 함께 보기: 지표 3개를 기간 평균 = 100 지수로 한 축에 겹친다(이중 축 없음). 링크 k=지표1,지표2,지표3 */
+const KP_KEYS=['total','direct','spend','roas','clicks','share','cpc'];
+const KP_NAME={total:'전체 매출',direct:'직접 매출',spend:'집행 광고비',roas:'ROAS',clicks:'클릭수',share:'직접 기여율',cpc:'클릭당 비용'};
+const KP_UNIT={total:'(원)',direct:'(원)',spend:'(원)',roas:'(%)',clicks:'(건)',share:'(%)',cpc:'(원)'};
+const KP_RATIO=['roas','share','cpc'];
+const KP_DEF=['total','spend','roas'];
+const KP_VAR=['--s1','--s2','--s3'];
+const kpFmt=(k,v)=>k==='roas'?fmt.pct(v):k==='share'?fmt.pct1(v):k==='clicks'?fmt.cnt(v)+'건':k==='cpc'?fmt.won(v):fmt.money(v);
+const kpRaw=(k,v)=>KP_RATIO.includes(k)&&k!=='cpc'?Math.round(v*1000)/10:Math.round(v);
+const bucketWord=b=>b==='d'?'일별':b==='w'?'주별':'월별';
+function kpSeries(ds){return ds.rows.map(r=>({total:r.total,direct:r.direct,spend:r.spend,roas:r.roas,clicks:r.clicks,share:r.total?r.direct/r.total:0,cpc:r.clicks?r.spend/r.clicks:0}));}
+function kpIndex(ds,c){
+  const rows=kpSeries(ds),n=rows.length;
+  return state.kp.map((k,i)=>{const vals=rows.map(r=>r[k]);const base=KP_RATIO.includes(k)?c[k]:(n?c[k]/n:0);
+    return {k,name:KP_NAME[k],color:`var(${KP_VAR[i]})`,vals,base,idx:vals.map(v=>base>0?v/base*100:0)};});
+}
+function renderKp(ds,c){
+  document.getElementById('kpPicks').innerHTML=state.kp.map((k,i)=>`<label class="kp-pick"><i style="background:var(${KP_VAR[i]})"></i><select data-kp="${i}" aria-label="지표 ${i+1}">${KP_KEYS.map(x=>`<option value="${x}"${x===k?' selected':''}>${KP_NAME[x]}</option>`).join('')}</select></label>`).join('');
+  document.getElementById('kpTable').textContent=state.kpTbl?'차트로 보기':'표로 보기';
+  const ser=kpIndex(ds,c),L=ds.labels,n=L.length;
+  const box=document.getElementById('kpChart');box.innerHTML='';
+  const legend=`<div class="kp-legend">${ser.map(s=>`<span><i style="background:${s.color}"></i>${esc(s.name)} <b>${esc(kpFmt(s.k,c[s.k]))}</b></span>`).join('')}<span class="flat">${esc(bucketWord(ds.bucket))} · 평균 = 100</span></div>`;
+  if(state.kpTbl){
+    box.innerHTML=`<div class="tw"><table class="data"><thead><tr><th>구간</th>${ser.map(s=>`<th class="num">${esc(s.name)}</th><th class="num">지수</th>`).join('')}</tr></thead><tbody>${L.map((lb,i)=>`<tr><td>${esc(lb)}</td>${ser.map(s=>`<td class="num">${esc(kpFmt(s.k,s.vals[i]))}</td><td class="num flat">${Math.round(s.idx[i])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`+legend;
+    return;
+  }
+  const W=900,H=250,Lp=44,Rp=108,T=14,B=28,pw=W-Lp-Rp,ph=H-T-B;
+  const svg=el('svg',{viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':'지표 함께 보기: '+ser.map(s=>s.name).join(', ')+' (선택 기간 평균 = 100)'});
+  const max=niceMax(Math.max(150,...ser.flatMap(s=>s.idx)));
+  const xc=i=>Lp+(n<=1?pw/2:pw*i/(n-1)), y=v=>T+ph-(v/max)*ph;
+  for(let k=0;k<=4;k++){const v=max*k/4,yy=y(v);el('line',{x1:Lp,x2:Lp+pw,y1:yy,y2:yy,stroke:k?'var(--line-2)':'var(--line)','stroke-width':1},svg);
+    const t=el('text',{x:Lp-6,y:yy+4,'text-anchor':'end','font-size':10,fill:'var(--muted)'},svg);t.textContent=String(Math.round(v));}
+  el('line',{x1:Lp,x2:Lp+pw,y1:y(100),y2:y(100),stroke:'var(--muted)','stroke-width':1,'stroke-dasharray':'4 4'},svg);   /* 평균 = 100 기준선(설명은 범례) */
+  ser.forEach(s=>{
+    el('path',{d:s.idx.map((v,i)=>(i?'L':'M')+xc(i).toFixed(1)+' '+y(v).toFixed(1)).join(' '),fill:'none',stroke:s.color,'stroke-width':2,'stroke-linejoin':'round','stroke-linecap':'round'},svg);
+    if(n<=31)s.idx.forEach((v,i)=>el('circle',{cx:xc(i).toFixed(1),cy:y(v).toFixed(1),r:4,fill:s.color,stroke:'var(--surface)','stroke-width':2},svg));
+  });
+  /* 끝 지점 직접 라벨(겹치면 13px 간격으로 밀어낸다). 글자는 본문 색, 선 색은 옆의 선이 맡는다 */
+  const ends=ser.map(s=>({s,y:y(s.idx[n-1]||0)})).sort((a,b)=>a.y-b.y);
+  for(let i=1;i<ends.length;i++)if(ends[i].y-ends[i-1].y<13)ends[i].y=ends[i-1].y+13;
+  ends.forEach(e=>{const t=el('text',{x:xc(n-1)+9,y:(e.y+4).toFixed(1),'font-size':11,fill:'var(--ink-2)'},svg);t.textContent=e.s.name;});
+  const step=n>40?7:n>20?5:n>10?2:1;
+  L.forEach((lb,i)=>{if(i%step&&i!==n-1)return;const t=el('text',{x:xc(i).toFixed(1),y:H-9,'text-anchor':'middle','font-size':10,fill:'var(--muted)'},svg);t.textContent=lb;});
+  const cross=el('line',{x1:0,x2:0,y1:T,y2:T+ph,stroke:'var(--muted)','stroke-width':1,opacity:0},svg);
+  const hit=el('rect',{x:Lp,y:T,width:pw,height:ph,fill:'transparent'},svg);
+  hit.addEventListener('pointermove',e=>{const pt=svg.createSVGPoint();pt.x=e.clientX;pt.y=e.clientY;const p=pt.matrixTransform(svg.getScreenCTM().inverse());
+    let i=n<=1?0:Math.round((p.x-Lp)/(pw/(n-1)));i=Math.max(0,Math.min(n-1,i));cross.setAttribute('x1',xc(i));cross.setAttribute('x2',xc(i));cross.setAttribute('opacity',1);
+    showTip(`<b>${esc(L[i])}</b>`+ser.map(s=>`<br><span class="k" style="background:${s.color}"></span>${esc(s.name)} <b>${esc(kpFmt(s.k,s.vals[i]))}</b> · 지수 ${Math.round(s.idx[i])}`).join(''),e.clientX,e.clientY);});
+  hit.addEventListener('pointerleave',()=>{cross.setAttribute('opacity',0);hideTip();});
+  box.appendChild(svg);
+  const lg=document.createElement('div');lg.innerHTML=legend;box.appendChild(lg);
+}
+
+/* 광고비 집중 구좌: 광고비 상위 5개 구좌 묶음의 광고비 비중 · 전체 매출 비중 · ROAS(전체 대비 %p) */
+function focusSlots(list){
+  const all=sum(list);const g=groupBy(list,c=>c.slot.group);
+  const rows=[...g.entries()].map(([name,l])=>({name,s:sum(l)})).filter(r=>r.s.spend>0).sort((a,b)=>b.s.spend-a.s.spend||(a.name<b.name?-1:1));
+  const top=rows.slice(0,5).map(r=>Object.assign(r,{spendShare:all.spend?r.s.spend/all.spend:0,salesShare:all.total?r.s.total/all.total:0,gap:r.s.roas-all.roas}));
+  return {all,top,n:rows.length,topShare:top.reduce((a,r)=>a+r.spendShare,0)};
+}
+function renderFocus(list){
+  const f=focusSlots(list);
+  document.getElementById('focusDesc').textContent=f.top.length?`광고비 상위 ${f.top.length}개 구좌가 집행 광고비의 ${fmt.pct1(f.topShare)}를 씁니다(집행 구좌 ${f.n}개 중). ROAS 아래 값은 전체 ROAS ${fmt.pct(f.all.roas)} 대비 차이입니다. 누르면 광고 구좌 필터가 걸립니다.${state.slot?' 지금은 광고 구좌 필터가 걸려 있습니다.':''}`:'선택 기간에 집행한 구좌가 없습니다.';
+  const mx=Math.max(0.0001,...f.top.map(r=>Math.max(r.spendShare,r.salesShare)));   /* 막대 길이는 가장 큰 비중 기준(글자는 실제 비중) */
+  const bar=(v,color)=>`<span class="fx-bar"><span class="trk"><span class="t" style="width:${(Math.max(0,Math.min(1,v/mx))*100).toFixed(1)}%;background:${color}"></span></span><span>${fmt.pct1(v)}</span></span>`;
+  document.getElementById('focusList').innerHTML=f.top.length?`<div class="fx-list">${f.top.map(r=>`<button type="button" class="fx-row" data-fslot="${esc(r.name)}" title="${esc(r.name)} · 광고비 ${esc(fmt.money(r.s.spend))} · 전체 매출 ${esc(fmt.money(r.s.total))} · 캠페인 ${r.s.campaigns}건"><span class="nm">${esc(r.name)}</span><span class="fx-bars">${bar(r.spendShare,'var(--s2)')}${bar(r.salesShare,'var(--s1)')}</span><span class="fx-roas"><b>${fmt.pct(r.s.roas)}</b><small class="${r.gap>=0?'up':'down'}">${r.gap>=0?'▲':'▼'} ${fmt.pct(Math.abs(r.gap))}p</small></span></button>`).join('')}</div><div class="legend"><span><i class="rect" style="background:var(--s2)"></i>광고비 비중</span><span><i class="rect" style="background:var(--s1)"></i>전체 매출 비중</span><span>막대 길이 = 가장 큰 비중 기준</span></div>`:'';
+}
+
+/* 성과 변동 감지(기준은 초안): 종료일 기준 최근 7일 vs 앞 7일, 광고 구좌 묶음별, 두 기간 모두 집행한 구좌만, |변화율| >= 50%. 링크 a= */
+const AN_KEYS=['total','clicks'];
+const AN_NAME={total:'전체 매출',clicks:'클릭수'};
+const AN_TH=0.5;
+function anWindows(){const e=P.cur.to;return {cur:{from:addDays(e,-6),to:e},prev:{from:addDays(e,-13),to:addDays(e,-7)}};}
+function anomalies(metric){
+  const w=anWindows();const m=new Map();
+  for(const c of campaigns){
+    if(c.end<w.prev.from||c.start>w.cur.to||!matches(c))continue;
+    for(const r of c.daily){
+      const k=r.date>=w.cur.from&&r.date<=w.cur.to?'c':r.date>=w.prev.from&&r.date<=w.prev.to?'p':null;if(!k)continue;
+      const g=c.slot.group;if(!m.has(g))m.set(g,{g,c:{v:0,spend:0},p:{v:0,spend:0}});
+      const o=m.get(g)[k];o.v+=r[metric];o.spend+=r.spend;
+    }
+  }
+  return [...m.values()].filter(x=>x.c.spend>0&&x.p.spend>0&&x.p.v>0).map(x=>Object.assign(x,{chg:(x.c.v-x.p.v)/x.p.v}))
+    .filter(x=>Math.abs(x.chg)>=AN_TH).sort((a,b)=>Math.abs(b.chg)-Math.abs(a.chg)||(a.g<b.g?-1:1));
+}
+function renderAnomalies(){
+  const w=anWindows();const res={};AN_KEYS.forEach(k=>{res[k]=anomalies(k);});const list=res[state.an];
+  const f=state.an==='clicks'?v=>fmt.cnt(v)+'건':fmt.money;
+  document.getElementById('anBadge').textContent=list.length?list.length+'건':'';
+  document.getElementById('anDesc').textContent=`종료일 ${P.cur.to} 기준 최근 7일(${w.cur.from}~${w.cur.to})을 그 앞 7일(${w.prev.from}~${w.prev.to})과 구좌별로 비교해 ${Math.round(AN_TH*100)}% 이상 바뀐 곳입니다. 두 기간 모두 집행한 구좌만 봅니다(기준은 초안). 누르면 그 구좌의 캠페인 목록이 열립니다.`;
+  document.getElementById('anTabs').innerHTML=AN_KEYS.map(k=>`<button type="button" role="tab" data-an="${k}" aria-selected="${k===state.an}">${AN_NAME[k]}<b>${res[k].length}</b></button>`).join('');
+  const SHOW=6;
+  document.getElementById('anList').innerHTML=list.length?`<div class="an-list">${list.slice(0,SHOW).map(x=>{const mx=Math.max(x.c.v,x.p.v)||1;
+    return `<button type="button" class="an-row" data-anslot="${esc(x.g)}"><span class="nm">${esc(x.g)}</span><span class="an-bars"><span class="trk"><span class="t prev" style="width:${(x.p.v/mx*100).toFixed(1)}%"></span></span><span class="trk"><span class="t" style="width:${(x.c.v/mx*100).toFixed(1)}%"></span></span></span><span class="an-v">${esc(f(x.p.v))} → <b>${esc(f(x.c.v))}</b></span><span class="an-c ${x.chg>0?'up':'down'}">${x.chg>0?'▲':'▼'} ${fmt.pct(Math.abs(x.chg))}</span></button>`;}).join('')}</div>${list.length>SHOW?`<div class="desc" style="margin:6px 0 0">외 ${list.length-SHOW}건 · 변동이 큰 순 ${SHOW}건만 표시</div>`:''}<div class="legend"><span><i class="rect prev"></i>앞 7일</span><span><i class="rect"></i>최근 7일</span></div>`
+    :`<div class="an-empty">${Math.round(AN_TH*100)}% 이상 바뀐 구좌가 없습니다.</div>`;
+}
+
+/* 기간 바로 선택(기준일 기준): 이번 달 · 지난달 · 최근 7일 · 최근 31일 · 지난주(월~일) */
+const PRESETS=[['thism','이번 달'],['lastm','지난달'],['d7','최근 7일'],['d31','최근 31일'],['lastw','지난주']];
+function presetPeriod(k){
+  const b=BASE_DATE;
+  if(k==='thism')return canonPeriod(b.slice(0,8)+'01',b);
+  if(k==='lastm'){const f=shiftMonth(b.slice(0,8)+'01',-1);return canonPeriod(f,monthEnd(f));}
+  if(k==='d7')return canonPeriod(addDays(b,-6),b);
+  if(k==='d31')return canonPeriod(addDays(b,-30),b);
+  if(k==='lastw'){const dow=(new Date(toMs(b)).getUTCDay()+6)%7;const mon=addDays(b,-dow-7);return canonPeriod(mon,addDays(mon,6));}
+  return null;
+}
+function renderPresets(){document.getElementById('fPresets').innerHTML=PRESETS.map(([k,l])=>`<button type="button" data-preset="${k}" aria-pressed="${state.period===presetPeriod(k)}">${l}</button>`).join('');}
+
+/* 캠페인 표: 정렬된 전체 행(화면·CSV 공용)과 맨 위 합계 행 */
+function campaignSorted(){
+  const key=state.cSort.key,dir=state.cSort.dir;
+  const val=r=>key==='name'?r.c.name:key==='brand'?r.c.brand:key==='md'?r.c.md.code:key==='slot'?r.c.slot.name:key==='start'?r.c.start:key==='end'?r.c.end:r.s[key];
+  return campaignRows().sort((a,b)=>{const x=val(a),y=val(b);return (x>y?1:x<y?-1:0)*dir;});
+}
+function sumRow(rows){const s=sum(rows.map(r=>r.c));return `<tr class="tsum"><td>합계 · ${rows.length}건</td><td colspan="6" class="flat">검색·필터에 맞는 캠페인 전체(더 보기로 숨은 행 포함)</td><td class="num">${fmt.money(s.spend)}</td><td class="num">${fmt.money(s.total)}</td><td class="num">${fmt.money(s.direct)}</td><td class="num">${s.spend?fmt.pct(s.roas):'-'}</td><td class="num">${fmt.cnt(s.clicks)}</td></tr>`;}
+
+/* 요약 타일 지표 도움말(정의는 기준 안내와 같다) */
+const HELP={'전체 매출':'광고 배너로 노출된 상품의 해당 일자 전체 매출. 배너를 거치지 않은 구매도 포함하며 접수일자 기준입니다.','직접 매출':'해당 배너(전시영역코드)를 통해 발생한 거래만 집계한 매출. 직접 기여율 = 직접 매출 ÷ 전체 매출.','집행 광고비':'구좌 단가 × 과금 단위 수(26.08 단가표의 구좌별 개별 단가). 매출이 없는 노출일도 과금됩니다.','ROAS':'전체 매출 ÷ 집행 광고비. 직접 매출 기준 ROAS는 표시하지 않습니다.','클릭수':'목업은 가상 값이며 GA4 구좌별 실측값으로 교체 예정입니다. 클릭당 비용 = 집행 광고비 ÷ 클릭수.'};
+const helpQ=l=>HELP[l]?`<span class="q" tabindex="0" role="img" aria-label="${esc(l)} 정의: ${esc(HELP[l])}" title="${esc(HELP[l])}">?</span>`:'';
+
+/* CSV 내려받기: data: 주소로 브라우저 안에서 파일을 만든다(서버 요청 없음). 첫 줄 = 조회기간·비교 기간·필터 */
+let lastDownload=null;
+function lastDl(){return lastDownload;}
+function csv(rows){return rows.map(r=>r.map(v=>{const s=String(v==null?'':v);return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}).join(',')).join('\r\n')+'\r\n';}
+function download(name,text){
+  const href='data:text/csv;charset=utf-8,'+encodeURIComponent('\ufeff'+text);
+  const a=document.createElement('a');a.setAttribute('href',href);a.setAttribute('download',name);document.body.appendChild(a);
+  if(typeof a.click==='function')a.click();a.remove();
+  lastDownload={name,text,size:text.length};toast(name+' 파일을 내려받았습니다');return lastDownload;
+}
+const stamp=()=>`${P.cur.from}_${P.cur.to}`;
+const pctOut=v=>Math.round(v*1000)/10;
+function metaLine(extra){return [`조회기간 : ${P.cur.from}~${P.cur.to}${extra?' ('+extra+')':''}`,`비교 기간 : ${P.prev.from}~${P.prev.to} (${cmpWord()})`,`팀 : ${state.team||'전체'}`,`MD : ${state.md||'전체'}`,`브랜드 : ${state.brand||'전체'}`,`광고 구좌 : ${state.slot||'전체'}`,META.dataKind].join(' · ');}
+function csvKp(){
+  const list=rowsFor('cur');const ds=dailySeries(list,'cur');const rows=kpSeries(ds);
+  const start=i=>ds.bucket==='d'?addDays(P.cur.from,i):ds.bucket==='w'?addDays(P.cur.from,i*7):ds.labels[i];
+  return ['광고성과센터_지표_'+stamp()+'.csv',csv([[metaLine(bucketWord(ds.bucket))],[ds.bucket==='m'?'월':'구간 시작일',...state.kp.map(k=>KP_NAME[k]+KP_UNIT[k])],...rows.map((r,i)=>[start(i),...state.kp.map(k=>kpRaw(k,r[k]))])])];
+}
+function csvCampaigns(){
+  const rows=campaignSorted();
+  return ['광고성과센터_캠페인_'+stamp()+'.csv',csv([[metaLine(state.cQuery.trim()?'검색어 '+state.cQuery.trim():'')],['캠페인 ID','캠페인(전시명)','브랜드','사업부','팀','MD','광고 구좌','상태','시작일','종료일','기간 내 노출일','집행 광고비(원)','전체 매출(원)','직접 매출(원)','ROAS(%)','클릭수(건)'],
+    ...rows.map(r=>[r.c.id,r.c.name,r.c.brand,r.c.md.bu,r.c.md.team,r.c.md.code,r.c.slot.name,r.status,r.c.start,r.c.end,r.c.daily.length,r.s.spend,r.s.total,r.s.direct,r.s.spend?pctOut(r.s.roas):'',r.s.clicks])])];
+}
+function csvRaw(){
+  const out=[];campaignRows().forEach(r=>r.c.daily.forEach(d=>out.push([d.date,r.c.id,r.c.name,r.c.md.bu,r.c.md.team,r.c.md.code,r.c.brand,r.c.slot.id,r.c.slot.name,d.spend,d.direct,d.total,d.clicks])));
+  out.sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:a[1]<b[1]?-1:a[1]>b[1]?1:0);
+  return ['광고성과센터_일별RAW_'+stamp()+'.csv',csv([['date','campaign_id','campaign_name','bu','team','md','brand','slot_id','slot_name','spend','direct_amt','total_amt','clicks'],...out])];
+}
+function csvMd(){
+  const cur=rowsFor('cur'),prev=rowsFor('prev');const key=c=>c.md.code+'|'+c.brand+'|'+c.slot.name;
+  const gc=groupBy(cur,key),gp=groupBy(prev,key);const mdTot=new Map();cur.forEach(c=>c.daily.forEach(r=>mdTot.set(c.md.code,(mdTot.get(c.md.code)||0)+r.total)));
+  const rows=[...new Set([...gc.keys(),...gp.keys()])].map(k=>{const c0=(gc.get(k)||gp.get(k))[0];return {m:c0.md,b:c0.brand,sl:c0.slot.name,c:sum(gc.get(k)||[]),p:sum(gp.get(k)||[])};})
+    .sort((a,b)=>(mdTot.get(b.m.code)||0)-(mdTot.get(a.m.code)||0)||(a.m.code<b.m.code?-1:a.m.code>b.m.code?1:0)||b.c.total-a.c.total);
+  return ['광고성과센터_MD별성과_'+stamp()+'.csv',csv([[metaLine()],['사업부','팀','MD','상품대분류','브랜드','광고 구좌','캠페인 수','전체 매출(원)','직접 매출(원)','집행 광고비(원)','ROAS(%)','클릭수(건)',`${cmpWord()} 전체 매출(원)`,`${cmpWord()} 대비 신장률(%)`,`${cmpShort()} ROAS(%)`],
+    ...rows.map(r=>[r.m.bu,r.m.team,r.m.code,r.m.cat,r.b,r.sl,r.c.campaigns,r.c.total,r.c.direct,r.c.spend,r.c.spend?pctOut(r.c.roas):'',r.c.clicks,r.p.total,(r.c.campaigns&&r.p.total)?pctOut((r.c.total-r.p.total)/r.p.total):'',r.p.spend?pctOut(r.p.roas):''])])];
+}
+function csvSlots(){
+  const cur=rowsFor('cur'),prev=rowsFor('prev');const gc=groupBy(cur,c=>c.slot.id),gp=groupBy(prev,c=>c.slot.id);
+  const rows=SLOTS.map(s=>({s,c:sum(gc.get(s.id)||[]),p:sum(gp.get(s.id)||[]),days:(gc.get(s.id)||[]).reduce((a,c)=>a+c.daily.length,0)})).filter(r=>r.c.campaigns||r.p.campaigns).sort((a,b)=>b.c.roas-a.c.roas);
+  return ['광고성과센터_광고구좌_'+stamp()+'.csv',csv([[metaLine()],['광고 구좌','영역','단가(만원)','단위','캠페인 수','노출일','집행 광고비(원)','전체 매출(원)','ROAS(%)','클릭수(건)',`${cmpShort()} ROAS(%)`,'ROAS 증감(%p)'],
+    ...rows.map(r=>[r.s.name,r.s.tab,r.s.rateLabel,r.s.unit,r.c.campaigns,r.days,r.c.spend,r.c.total,r.c.spend?pctOut(r.c.roas):'',r.c.clicks,r.p.spend?pctOut(r.p.roas):'',(r.p.spend&&r.c.spend)?pctOut(r.c.roas-r.p.roas):''])])];
+}
+
 const TITLES={home:['광고 요약','선택 기간(접수일자 기준)의 광고 배너 성과를 {cmp} 값과 비교합니다. 모든 수치는 가상 데이터입니다.'],md:['MD별 성과','MD가 담당한 브랜드와 광고 구좌별 성과를 한 번에 봅니다.'],campaign:['캠페인(배너) 목록','선택 기간에 진행된 광고 배너를 캠페인 단위로 봅니다.'],slot:['광고 구좌 비교','구좌별 단가와 성과를 가로로 비교합니다.'],shot:['구좌별 현황','영역 → 구좌 → 위치를 고르면 앱 화면 캡처(점선 상자가 구좌 위치)와 선택 기간 성과가 보입니다.'],guide:['기준 안내','지표 정의와 집계 기준입니다.']};
 
 /* ---------- URL 상태: 링크에 화면·필터를 담는다 (#v=&p=&c=&t=&m=&b=&s=&g=&q=&o=&e=) ---------- */
@@ -1096,6 +1334,8 @@ function parseHash(){
   const q=new URLSearchParams((location.hash||'').replace(/^#/,''));
   const s={view:DEFAULTS.view,period:DEFAULTS.period,cmp:DEFAULTS.cmp,team:'',md:'',brand:'',slot:'',shot:'',cQuery:'',sortKey:DEFAULTS.sortKey,sortDir:DEFAULTS.sortDir,open:[]};
   const v=q.get('v');if(VIEWS.includes(v))s.view=v;
+  s.kp=KP_DEF.slice();{const k=(q.get('k')||'').split(',');if(k.length===3&&k.every(x=>KP_KEYS.includes(x))&&new Set(k).size===3)s.kp=k;}
+  s.an=AN_KEYS.includes(q.get('a'))?q.get('a'):'total';
   const p=q.get('p');if(validPeriod(p))s.period=p;
   const c=q.get('c');if(validCmp(c))s.cmp=c;
   const m=MDS.find(x=>x.code===q.get('m'));
@@ -1117,7 +1357,7 @@ function parseHash(){
 function applyHash(){
   const s=parseHash();
   state.view=s.view;state.period=s.period;state.cmp=s.cmp;state.team=s.team;state.md=s.md;state.brand=s.brand;state.slot=s.slot;state.shot=s.shot;
-  state.cQuery=s.cQuery;state.cSort={key:s.sortKey,dir:s.sortDir};state.cLimit=15;
+  state.cQuery=s.cQuery;state.cSort={key:s.sortKey,dir:s.sortDir};state.cLimit=15;state.kp=s.kp;state.an=s.an;
   expanded.clear();s.open.forEach(k=>expanded.add(k));
 }
 function serialize(){
@@ -1129,6 +1369,8 @@ function serialize(){
   if(state.brand)add('b',state.brand);
   if(state.slot)add('s',state.slot);
   if(state.shot&&state.shot!==SHOT_IDS[0])add('g',state.shot);
+  if(state.kp.join(',')!==KP_DEF.join(','))a.push('k='+state.kp.join(','));   /* 지표 키는 영문 소문자라 인코딩 없이(쉼표 그대로) 적는다 */
+  if(state.an!=='total')add('a',state.an);
   const qq=Array.from(state.cQuery.trim()).slice(0,40).join('');if(qq)add('q',qq);
   if(state.cSort.key!==DEFAULTS.sortKey||state.cSort.dir!==DEFAULTS.sortDir)add('o',state.cSort.key+':'+(state.cSort.dir>0?'a':'d'));
   if(expanded.size)a.push('e='+[...expanded].map(enc).join(','));
@@ -1162,7 +1404,7 @@ function render(push){
   document.getElementById('emptyBox').hidden=!none;
   document.getElementById('cSearch').value=state.cQuery;
   if(!none){
-    if(state.view==='home'){const k=renderKPIs(cur,prev);renderSlotBars(cur,prev);renderMdSummary(cur,prev);renderTrends(k.ds,k.dp);}
+    if(state.view==='home'){const k=renderKPIs(cur,prev);renderKp(k.ds,k.c);renderFocus(cur);renderAnomalies();renderSlotBars(cur,prev);renderMdSummary(cur,prev);renderTrends(k.ds,k.dp);}
     if(state.view==='md')renderMdTree(cur,prev);
     if(state.view==='campaign')renderCampaigns();
     if(state.view==='slot')renderSlotTable(cur,prev);
@@ -1234,6 +1476,21 @@ window.addEventListener('scroll',hideTip,{passive:true});
 function onNav(){if((location.hash||'').replace(/^#/,'')===serialize())return;applyHash();render(false);}
 window.addEventListener('hashchange',onNav);window.addEventListener('popstate',onNav);
 
+/* v2.4 이벤트: 지표 선택·표 보기·CSV, 집중 구좌·변동 감지 항목, 기간 바로 선택, 표 내려받기 */
+const pickBtn=(e,sel)=>e.target&&e.target.closest?e.target.closest(sel):null;
+document.getElementById('kpPicks').addEventListener('change',e=>{
+  const t=e.target;if(!t||!t.dataset||t.dataset.kp==null)return;const i=+t.dataset.kp,v=t.value;
+  if(!(i>=0&&i<3)||!KP_KEYS.includes(v))return;
+  const kp=state.kp.slice();const j=kp.indexOf(v);if(j>=0&&j!==i)kp[j]=kp[i];kp[i]=v;state.kp=kp;render();   /* 이미 고른 지표를 고르면 두 자리를 맞바꾼다 */
+});
+document.getElementById('kpTable').addEventListener('click',()=>{state.kpTbl=!state.kpTbl;render();});
+document.getElementById('kpCsv').addEventListener('click',()=>{const [n,t]=csvKp();download(n,t);});
+document.getElementById('focusList').addEventListener('click',e=>{const b=pickBtn(e,'button[data-fslot]');if(!b||!SLOT_GROUPS.includes(b.dataset.fslot))return;state.slot=b.dataset.fslot;state.cLimit=15;render();});
+document.getElementById('anTabs').addEventListener('click',e=>{const b=pickBtn(e,'button[data-an]');if(!b||!AN_KEYS.includes(b.dataset.an))return;state.an=b.dataset.an;render();});
+document.getElementById('anList').addEventListener('click',e=>{const b=pickBtn(e,'button[data-anslot]');if(!b||!SLOT_GROUPS.includes(b.dataset.anslot))return;state.slot=b.dataset.anslot;state.view='campaign';state.cLimit=15;render(true);window.scrollTo(0,0);});
+document.getElementById('fPresets').addEventListener('click',e=>{const b=pickBtn(e,'button[data-preset]');if(!b)return;const p=presetPeriod(b.dataset.preset);if(!p||!validPeriod(p))return;state.period=p;state.cLimit=15;render();});
+[['cCsv',csvCampaigns],['cRaw',csvRaw],['mdCsv',csvMd],['sCsv',csvSlots]].forEach(([id,fn])=>document.getElementById(id).addEventListener('click',()=>{const [n,t]=fn();download(n,t);}));
+
 /* ---------- 시작 ---------- */
 document.getElementById('appName').textContent=APP.name;
 document.getElementById('appTag').textContent=APP.tag;
@@ -1245,6 +1502,6 @@ applyHash();
 render();
 })();
 </script>
-<!-- 공개용 게시본 v2.3 (2026-10-26) -->
+<!-- 공개용 게시본 v2.4 (2026-10-27) -->
 </body>
 </html>
