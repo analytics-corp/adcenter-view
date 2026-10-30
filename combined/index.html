@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex,nofollow">
 <!-- 공개용 게시본입니다. 이 파일을 직접 고치지 마세요(정본에서 다시 생성합니다). -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>통합 광고센터 예시 (adcenter_combined)</title>
+<title>통합 광고센터</title>
 <style>
 /* 통합 광고센터 예시 adcenter_combined(광고센터 + 판매자 인사이트, 광고주 관점 참조 구현). 좌측 메뉴 + 상단 기간 막대 + 본문. 모든 수치는 가상 데이터(광고 성과 센터와 같은 생성부). */
 :root{
@@ -281,7 +281,7 @@ table.data td.wrap{white-space:normal;min-width:220px}
 <body>
 <div class="app">
   <nav class="nav" aria-label="주요 메뉴">
-    <div class="brand" id="appName">통합 광고센터 예시<small id="appTag">광고센터 + 판매자 인사이트</small></div>
+    <div class="brand" id="appName">통합 광고센터<small id="appTag">광고센터 + 판매자 인사이트</small></div>
     <div class="acct">
       <div class="who" id="acctName">광고주 전체 보기</div>
       <label class="sr" for="fBrand">광고주(브랜드) 선택</label>
@@ -305,7 +305,7 @@ table.data td.wrap{white-space:normal;min-width:220px}
     <button type="button" class="item" data-view="sales">판매 분석</button>
     <button type="button" class="item" data-view="traffic">유입경로 분석 <span class="new">NEW</span></button>
     <button type="button" class="item dim" data-view="scope" data-scope="category">카테고리 분석</button>
-    <div class="grp">예시 범위 밖 (메뉴만)</div>
+    <div class="grp">준비 중 메뉴</div>
     <button type="button" class="item dim" data-view="scope" data-scope="reco">추천</button>
     <button type="button" class="item dim" data-view="scope" data-scope="promo">프로모션 관리</button>
     <button type="button" class="item dim" data-view="scope" data-scope="tools">도구 (키워드·노출 진단)</button>
@@ -317,13 +317,12 @@ table.data td.wrap{white-space:normal;min-width:220px}
     <div class="topbar">
       <div class="crumbs" id="crumbs"><b>광고 홈</b></div>
       <div class="right">
-        <span class="chip base" id="chipBase">기준일</span><span class="chip mock" id="chipMock">가상 데이터</span>
+        <span class="chip base" id="chipBase">기준일</span>
         <a class="btn" id="btnGuide" href="https://hmall-ad-map.vercel.app/" target="_blank" rel="noopener noreferrer" title="구좌 위치 안내 페이지를 새 창으로 엽니다">광고 구좌 안내</a>
         <button type="button" class="btn" id="btnSave" title="지금 보는 화면 파일(HTML)을 내 PC에 저장합니다">HTML 저장</button>
         <button type="button" class="btn" id="btnTheme" aria-pressed="false">다크/라이트</button>
       </div>
     </div>
-    <div class="alert" id="alertBox"><b>안내</b><span id="alertText"></span></div>
     <div class="page">
       <div class="head">
         <div><h1 id="pageTitle">광고 홈</h1><div class="sub" id="pageSub"></div></div>
@@ -479,7 +478,7 @@ table.data td.wrap{white-space:normal;min-width:220px}
             <div class="card">
               <h3 id="bFormTitle">매출 성장 광고 보고서</h3><div class="desc">광고 운영 결과 데이터를 기간별로 상세하게 확인합니다. 만든 보고서는 오른쪽 '요청한 보고서'에 쌓이고 '보고서 조회'로 다시 엽니다.</div>
               <div class="builder" style="grid-template-columns:1fr">
-                <label class="f">보고서 유형<select id="bType"><option value="sales">매출 성장 광고 보고서</option><option value="newc">신규 구매 고객 확보 광고 보고서</option><option value="aware" disabled>인지도 상승 광고 보고서 (예시 범위 밖)</option><option value="display" disabled>디스플레이 광고 보고서 (디스플레이 광고 메뉴)</option></select></label>
+                <label class="f">보고서 유형<select id="bType"><option value="sales">매출 성장 광고 보고서</option><option value="newc">신규 구매 고객 확보 광고 보고서</option><option value="aware" disabled>인지도 상승 광고 보고서 (준비 중)</option><option value="display" disabled>디스플레이 광고 보고서 (디스플레이 광고 메뉴)</option></select></label>
                 <div class="f">보고서 기간<div class="checks" id="bPerBox" style="flex-direction:column;gap:4px;font-weight:400"></div></div>
                 <div class="f">기간 구분<div class="checks" id="bUnitBox" style="font-weight:400"></div></div>
                 <label class="f">광고 영역<select id="bTab"><option value="">전체</option></select></label>
@@ -539,16 +538,16 @@ table.data td.wrap{white-space:normal;min-width:220px}
 
       <section class="view" id="view-create" hidden>
         <div class="card">
-          <h3>광고 만들기 <span class="q">예시 — 등록은 저장되지 않습니다</span></h3>
+          <h3>광고 만들기 <span class="q">입력 내용은 저장되지 않습니다</span></h3>
           <div class="desc">1단계: 광고 목표를 고릅니다. 목표에 따라 성과 지표와 보고서가 달라집니다.</div>
           <div class="goals" id="goalPick"></div>
           <div class="steps" id="createSteps"></div>
-          <div style="margin-top:12px;display:flex;gap:8px"><button type="button" class="btn primary" id="createGo">캠페인 설정으로 (예시 종료)</button><button type="button" class="btn" data-view="home" id="createBack">광고 홈으로</button></div>
+          <div style="margin-top:12px;display:flex;gap:8px"><button type="button" class="btn primary" id="createGo">캠페인 설정으로</button><button type="button" class="btn" data-view="home" id="createBack">광고 홈으로</button></div>
         </div>
       </section>
 
       <section class="view" id="view-scope" hidden>
-        <div class="card"><h3 id="scopeTitle"></h3><div class="desc" id="scopeDesc"></div><div class="empty">이 메뉴는 예시 센터의 구현 범위 밖입니다. 개발 논의에서 필요 여부와 우선순위를 정합니다.</div></div>
+        <div class="card"><h3 id="scopeTitle"></h3><div class="desc" id="scopeDesc"></div><div class="empty">이 메뉴는 아직 화면을 만들지 않았습니다. 필요 여부와 우선순위를 검토하고 있습니다.</div></div>
       </section>
 
       <section class="view" id="view-history" hidden>
@@ -631,7 +630,7 @@ table.data td.wrap{white-space:normal;min-width:220px}
 (function(){
 'use strict';
 /* ---------- 앱·기준 상수: 명칭·기준일·버전은 여기서만 바꾼다 ---------- */
-const APP={name:'통합 광고센터 예시',tag:'광고센터 + 판매자 인사이트 · 개발 공유(adcenter_combined)',version:'v2.1',build:'2026-10-27'};
+const APP={name:'통합 광고센터',tag:'광고센터 + 판매자 인사이트',version:'v2.2',build:'2026-10-30'};
 const META={baseDate:'2026-06-30',pipeline:'내부 집계',priceBook:'26.08 단가표',dataKind:'가상 데이터',mock:true,source:'광고 성과 센터 v2.3 생성부(시드 20261023)',dataSha:'5796bbff008e'};
 /* ---------- 가상 데이터 생성 (시드 고정) ---------- */
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
@@ -1008,8 +1007,8 @@ const state=Object.assign({},DEFAULTS,{atab:'camp',btab:'today',ntab:'notice',ch
   mPer:'lw',mDaily:false,mGoals:new Set(['sales','newc']),mCamp:'',mResult:null,templates:[],mDims:new Set(['month','tab']),mMets:new Set(['imp','clicks','spend','direct','roas']),
   sbOpen:false,ruOpen:false,ruTpl:'minroas',ruLogId:0,slQty:true,slRev:true,slOpen:'',kp:['imp','clicks','orders'],anTab:'imp',kpiSet:{sales:['spendAll','spend','direct','total','totalQty','clicks','qty','orders','roas','cvr'],newc:['spend','newc','cpa','firstRev','firstRoas','rep','repRev','allRev']}});
 const VIEWS=['home','campaign','product','report','create','scope','guide','history','budget','rules','detail','display','sales','traffic'];
-const VIEW_TITLE={home:'광고 홈',campaign:'광고 관리',product:'상품 기회 탐색',report:'광고 보고서',create:'광고 만들기',scope:'예시 범위 밖',guide:'기준 안내',history:'변경 이력',budget:'공유 예산',rules:'자동규칙',detail:'상세페이지 관리',display:'디스플레이 광고 관리',sales:'판매 분석',traffic:'유입경로 분석'};
-const SCOPE_INFO={reco:['추천','캠페인·상품 단위로 구좌 변경·소재 교체·기간 연장을 제안하는 화면. 입찰·예산 제안이 중심인 예시와 달리 Hmall은 구좌 고정 단가라 "구좌 변경 제안"으로 다시 정의한다.'],promo:['프로모션 관리','광고와 연계한 쿠폰·행사 관리. 기존 행사 시스템과의 연동 범위를 먼저 정한다.'],tools:['도구 (키워드 도구·전환 추적·광고 노출 진단)','검색 광고용 연관 검색어 발굴(월간 검색수·클릭률·경쟁 정도), 전환 추적 설정, 광고 노출 진단, 대량 관리 같은 광고 신청 보조 도구. 예시 광고센터 B(포털 검색광고 센터)의 구성. Hmall은 검색 광고 영역의 검색어 체계와 GA 전환 추적이 정해진 뒤 만든다(현황 시각화가 목적인 1차 범위 밖).'],category:['카테고리 분석','카테고리별 경쟁 상품·검색어·브랜드 랭킹과 Top 100 경쟁상품 유입률 비교(예시 판매자센터에서는 유료 구독 기능). Hmall 안의 카테고리 데이터만으로 만들지, 외부 데이터를 붙일지 결정 뒤 만든다.']};
+const VIEW_TITLE={home:'광고 홈',campaign:'광고 관리',product:'상품 기회 탐색',report:'광고 보고서',create:'광고 만들기',scope:'준비 중 메뉴',guide:'기준 안내',history:'변경 이력',budget:'공유 예산',rules:'자동규칙',detail:'상세페이지 관리',display:'디스플레이 광고 관리',sales:'판매 분석',traffic:'유입경로 분석'};
+const SCOPE_INFO={reco:['추천','캠페인·상품 단위로 구좌 변경·소재 교체·기간 연장을 제안하는 화면. Hmall은 구좌가 고정 단가라 입찰·예산 대신 "구좌 변경 제안"으로 정의한다.'],promo:['프로모션 관리','광고와 연계한 쿠폰·행사 관리. 기존 행사 시스템과의 연동 범위를 먼저 정한다.'],tools:['도구 (키워드 도구·전환 추적·광고 노출 진단)','검색 광고용 연관 검색어 발굴(월간 검색수·클릭률·경쟁 정도), 전환 추적 설정, 광고 노출 진단, 대량 관리 같은 광고 신청 보조 도구. Hmall은 검색 광고 영역의 검색어 체계와 GA 전환 추적이 정해진 뒤 만든다.'],category:['카테고리 분석','카테고리별 경쟁 상품·검색어·브랜드 랭킹과 Top 100 경쟁상품 유입률 비교. Hmall 안의 카테고리 데이터만으로 만들지, 외부 데이터를 붙일지 결정 뒤 만든다.']};
 const SLOT_BY_ID={};SLOTS.forEach(s=>{SLOT_BY_ID[s.id]=s;});
 const BRANDS=[...new Set(campaigns.map(c=>c.brand))].sort((a,b)=>a.localeCompare(b,'ko'));
 
@@ -1194,7 +1193,7 @@ function actionItems(){
 
 /* ---------- 광고 홈 ---------- */
 const NOTICES=[
-  ['안내','2026-06-30','광고센터 예시 v1.0 — 광고 성과 센터와 같은 가상 데이터로 광고주 화면 구성을 검토합니다'],
+  ['안내','2026-06-30','통합 광고센터 오픈 — 광고 성과와 판매자 인사이트를 한 화면에서 확인하세요'],
   ['정책','2026-06-25','구좌 단가표 26.08 기준 적용(과금 단위: 일·12시간·1시간·7일·1회 발송)'],
   ['기능','2026-06-20','광고 보고서 4종(자동·광고·정산·맞춤)에 CSV 내려받기 추가'],
   ['점검','2026-06-15','실적 집계 반영 시각 안내: 매일 05:00 전일 접수 실적 반영(계획)'],
@@ -1269,7 +1268,7 @@ function renderBudget(){
   const g1=sum(list.filter(c=>c.goal==='sales')),g2=sum(list.filter(c=>c.goal==='newc'));
   const month=campaigns.filter(c=>matches(c)&&c.start.slice(0,7)===BASE_DATE.slice(0,7));const contract=month.reduce((s,c)=>s+c.contract,0);const spent=month.reduce((s,c)=>s+c.daily.filter(x=>x.date<=BASE_DATE).reduce((a,x)=>a+x.spend,0),0);
   const bar=(a,b)=>`<div class="track"><i style="width:${(b?a/b*100:0).toFixed(1)}%"></i></div>`;
-  document.getElementById('budBox').innerHTML=`<div><div class="big">${fmt.won(S.spend)}</div><div class="cap">${state.btab==='today'?'오늘('+BASE_DATE+')':'최근 7일('+r.from+' ~ '+r.to+')'} 집행 광고비 · 기준 시각 ${BASE_DATE} 23:59 집계(가상)</div></div>
+  document.getElementById('budBox').innerHTML=`<div><div class="big">${fmt.won(S.spend)}</div><div class="cap">${state.btab==='today'?'오늘('+BASE_DATE+')':'최근 7일('+r.from+' ~ '+r.to+')'} 집행 광고비 · 기준 시각 ${BASE_DATE} 23:59 집계</div></div>
   <div class="row"><span>매출 성장</span>${bar(g1.spend,S.spend)}<span class="v">${fmt.money(g1.spend)}</span></div>
   <div class="row"><span>신규 구매 고객 확보</span><div class="track"><i class="g2" style="width:${(S.spend?g2.spend/S.spend*100:0).toFixed(1)}%"></i></div><span class="v">${fmt.money(g2.spend)}</span></div>
   <div class="row"><span>운영 캠페인 · 구좌</span><span class="muted">${S.campaigns}건 · ${new Set(list.map(c=>c.slot.id)).size}개 구좌</span><span class="v">${fmt.cnt(S.clicks)} 클릭</span></div>
@@ -1383,7 +1382,7 @@ function renderAuto(){
 }
 
 /* ---------- 광고 만들기 · 범위 밖 ---------- */
-const CREATE_GOALS=[['sales','매출 성장','광고 전환 매출을 늘리는 것이 목표입니다. 중요 결과: 광고 전환 매출 · 광고수익률','센터 지표와 같음'],['newc','신규 구매 고객 확보','최근 1년 미구매 고객의 첫 구매가 목표입니다. 중요 결과: 신규 구매 고객 수 · 고객당 비용','정의 확정 전(가상)'],['aware','인지도 상승','도달·노출이 목표입니다. 중요 결과: 도달 수 · 도달당 비용','예시 범위 밖 — 노출 측정 전']];
+const CREATE_GOALS=[['sales','매출 성장','광고 전환 매출을 늘리는 것이 목표입니다. 중요 결과: 광고 전환 매출 · 광고수익률','센터 지표와 같음'],['newc','신규 구매 고객 확보','최근 1년 미구매 고객의 첫 구매가 목표입니다. 중요 결과: 신규 구매 고객 수 · 고객당 비용','정의 확정 전'],['aware','인지도 상승','도달·노출이 목표입니다. 중요 결과: 도달 수 · 도달당 비용','준비 중 — 노출 측정 전']];
 function renderCreate(){
   document.getElementById('goalPick').innerHTML=CREATE_GOALS.map(g=>`<button type="button" data-cgoal="${g[0]}" aria-pressed="${state.createGoal===g[0]}" ${g[0]==='aware'?'disabled':''}><b>${g[1]}</b><span>${g[2]}</span><em>${g[3]}</em></button>`).join('');
   document.getElementById('createSteps').innerHTML=[['1 광고 목표','매출 성장 / 신규 구매 고객 확보. 목표에 따라 성과 지표·보고서가 바뀝니다.'],['2 구좌·기간','영역 → 구좌 → 위치 순으로 고르고(광고 구좌 안내와 같은 순서) 단가 × 과금 단위로 계약 금액을 확인합니다.'],['3 상품·소재','노출할 상품과 소재를 등록합니다. 소재는 검수 뒤 노출됩니다(검수 대기는 조치 필요에 표시).'],['4 등록 완료','계약 금액이 확정되고 캠페인이 광고 관리 목록에 생깁니다. 구좌 고정 단가라 입찰·일예산 단계가 없습니다.']].map(s=>`<div><b>${s[0]}</b>${s[1]}</div>`).join('');
@@ -1454,7 +1453,7 @@ function guideHTML(){
 /* ---------- 광고 관리 (v2.0: 지표 타일 설정·그래프 지표 선택·검색 및 필터·열 설정·진단·점수·예산 유형·운영 권한) ---------- */
 const SORT_KEYS=['spend','direct','total','roas','imp','clicks','ctr','orders','qty','cvr','newc','cpa','firstRev','firstRoas','rep','repRev','allRev','annual','clickCvr','eng','engRate','start','name','score','today'];
 const KPI_DEFS={spendAll:'전체 집행 광고비',spend:'집행 광고비',direct:'광고 전환 매출',total:'전체 매출',totalQty:'전체 판매수',clicks:'클릭수',qty:'광고 전환 판매수',orders:'광고 전환 주문수',roas:'광고 수익률',cvr:'전환율',imp:'노출수',ctr:'클릭률',cpc:'클릭당 비용',newc:'신규 구매 고객 수',cpa:'신규 구매 고객당 비용',firstRev:'첫구매 광고 전환 매출(a)',firstRoas:'첫구매 광고수익률',rep:'재구매 고객 수',repRev:'재구매 매출(b)',allRev:'전체 매출(a+b)'};
-const KPI_HELP={direct:'광고 성과는 클릭 후 14일까지 집계되므로 추후 광고 전환 매출이 오를 수 있습니다(예시 정의). 센터는 접수일자 기준',cvr:'광고 성과는 클릭 후 14일까지 집계되므로 추후 전환율이 오를 수 있습니다(예시 정의)',total:'선택 기간 동안 판매한 모든 상품의 매출 총합(배너 노출 상품 기준). 센터와 같은 값',totalQty:'전체 매출 기준 판매 수량(가상)',roas:'광고 전환 매출 ÷ 집행 광고비',spendAll:'모든 목표 캠페인의 집행 광고비 합'};
+const KPI_HELP={direct:'광고 성과는 클릭 후 14일까지 집계되므로 추후 광고 전환 매출이 오를 수 있습니다',cvr:'광고 성과는 클릭 후 14일까지 집계되므로 추후 전환율이 오를 수 있습니다',total:'선택 기간 동안 판매한 모든 상품의 매출 총합(배너 노출 상품 기준). 센터와 같은 값',totalQty:'전체 매출 기준 판매 수량',roas:'광고 전환 매출 ÷ 집행 광고비',spendAll:'모든 목표 캠페인의 집행 광고비 합'};
 const KPI_DEFAULT={sales:['spendAll','spend','direct','total','totalQty','clicks','qty','orders','roas','cvr'],newc:['spend','newc','cpa','firstRev','firstRoas','rep','repRev','allRev']};
 const GRAPH_KEYS=['spend','direct','total','clicks','imp','orders','qty','newc','firstRev','repRev','roas'];
 const COLS={
@@ -1623,7 +1622,7 @@ function makeBilling(){const range=billingRange();if(state.bil==='day'&&dayCount
 const CUSTOM_TYPES=[
   ['kw','검색어 전환 보고서','집행한 검색 광고의 검색어별 노출수, 클릭수, 클릭률을 포함한 다양한 성과 지표를 확인할 수 있습니다.','매출 성장, 신규 구매 고객 확보','검색어별 노출수, 클릭수, 클릭률, 주문수, 전환 매출액, 광고 수익률'],
   ['prod','상품 전환 보고서','집행한 광고의 상품별 노출수, 클릭수, 클릭률을 포함한 다양한 성과 지표를 확인할 수 있습니다.','매출 성장, 신규 구매 고객 확보','광고 상품별 노출수, 클릭수, 클릭률, 주문수, 전환 매출액, 광고 수익률'],
-  ['reach','고객 도달 보고서','집행한 광고의 캠페인별 노출수, 클릭수, 도달수를 확인할 수 있습니다.','인지도 상승 (예시 범위 밖)','캠페인별 노출수, 클릭수, 도달수, 노출빈도, 도달당 비용'],
+  ['reach','고객 도달 보고서','집행한 광고의 캠페인별 노출수, 클릭수, 도달수를 확인할 수 있습니다.','인지도 상승 (준비 중)','캠페인별 노출수, 클릭수, 도달수, 노출빈도, 도달당 비용'],
   ['custom','맞춤 보고서','전체 보고서 지표를 내가 원하는 기준 항목 × 성과 항목으로 구성합니다.','매출 성장, 신규 구매 고객 확보','전체 보고서 지표'],
   ['tpl','내 보고서 템플릿','저장한 보고서 구성을 불러와 다시 만듭니다.','—','저장한 구성']
 ];
@@ -1668,7 +1667,7 @@ function renderCustom(){
   document.getElementById('mPerBox').innerHTML=radioBox('mPer','mper',PER_OPTS().map(o=>[o[0],o[1].replace(' (상단 기간 막대의 시작일~종료일)',' 특정 기간(상단 기간 막대)'),o[2]]),state.mPer);
   document.getElementById('mUnitBox').innerHTML=radioBox('mUnit','munit',[['sum','합계'],['day','일별']],state.mDaily?'day':'sum');
   const reachOnly=state.rtype==='reach';
-  document.getElementById('mGoals').innerHTML=`<label><input type="checkbox" data-mgoal="sales" ${state.mGoals.has('sales')?'checked':''} ${reachOnly?'disabled':''}>매출 성장 광고</label><label><input type="checkbox" data-mgoal="newc" ${state.mGoals.has('newc')?'checked':''} ${reachOnly?'disabled':''}>신규 구매 고객 확보 광고</label><label><input type="checkbox" disabled ${reachOnly?'checked':''}>인지도 상승 광고 (예시 범위 밖)</label>`;
+  document.getElementById('mGoals').innerHTML=`<label><input type="checkbox" data-mgoal="sales" ${state.mGoals.has('sales')?'checked':''} ${reachOnly?'disabled':''}>매출 성장 광고</label><label><input type="checkbox" data-mgoal="newc" ${state.mGoals.has('newc')?'checked':''} ${reachOnly?'disabled':''}>신규 구매 고객 확보 광고</label><label><input type="checkbox" disabled ${reachOnly?'checked':''}>인지도 상승 광고 (준비 중)</label>`;
   const camps=rowsFor(rangeOf(state.mPer)).filter(c=>state.mGoals.has(c.goal)).map(c=>({c,s:sum([c])})).sort((a,b)=>b.s.spend-a.s.spend);
   if(state.mCamp&&!camps.some(o=>o.c.id===state.mCamp))state.mCamp='';
   document.getElementById('mCamp').innerHTML='<option value="">모든 캠페인</option>'+camps.map(o=>`<option value="${o.c.id}" ${o.c.id===state.mCamp?'selected':''}>${esc(o.c.name)} (${o.c.id})</option>`).join('');document.getElementById('mCamp').value=state.mCamp;
@@ -1716,7 +1715,7 @@ function renderHistory(){
 
 /* ---------- 공유 예산 (계약 한도 묶음) ---------- */
 function renderShared(){
-  document.getElementById('bFaq').innerHTML=`<div><h3 style="font-size:13px">Q. 공유 예산이 무엇인가요?</h3><div class="desc">전체 캠페인 혹은 일부 캠페인을 묶어 <b>계약 한도</b>를 함께 관리합니다. Hmall 구좌는 고정 단가라 캠페인 사이에 일예산을 옮기는 일은 없고, 묶음의 한도 대비 집행률을 보며 다음 계약 금액을 조정합니다(예시 정의).</div></div><div><h3 style="font-size:13px">Q. 어떤 점이 좋은가요?</h3><div class="desc"><b>전략적 예산 관리</b> — 비슷한 상품·마진·광고수익률의 캠페인을 묶어 한눈에 봅니다.<br><b>예산 효율성</b> — 한도를 넘기 전에 자동규칙 알림으로 연결합니다.</div></div>`;
+  document.getElementById('bFaq').innerHTML=`<div><h3 style="font-size:13px">Q. 공유 예산이 무엇인가요?</h3><div class="desc">전체 캠페인 혹은 일부 캠페인을 묶어 <b>계약 한도</b>를 함께 관리합니다. Hmall 구좌는 고정 단가라 캠페인 사이에 일예산을 옮기는 일은 없고, 묶음의 한도 대비 집행률을 보며 다음 계약 금액을 조정합니다.</div></div><div><h3 style="font-size:13px">Q. 어떤 점이 좋은가요?</h3><div class="desc"><b>전략적 예산 관리</b> — 비슷한 상품·마진·광고수익률의 캠페인을 묶어 한눈에 봅니다.<br><b>예산 효율성</b> — 한도를 넘기 전에 자동규칙 알림으로 연결합니다.</div></div>`;
   const list=rowsFor(P.cur);const byId={};list.forEach(c=>{byId[c.id]=c;});
   const vis=budgets.filter(b=>!state.brand||b.brand===state.brand);
   document.getElementById('sbCount').textContent=`${vis.length}개 · 선택 기간 ${P.cur.from} ~ ${P.cur.to}`;
@@ -1743,7 +1742,7 @@ function ruleHits(rule,asOf){
 }
 function renderRules(){
   const S7=sum(rowsFor(PRESETS['7d']()));const stop=S7.spend>S7.total;
-  document.getElementById('rulesSys').innerHTML=`<ul class="notice" style="margin-bottom:8px"><li><span>최근 7일간 <b>전체 매출</b>보다 <b>전체 집행 광고비</b>가 많이 발생할 경우 모든 캠페인이 자동으로 일시정지됩니다. 지금: 전체 매출 ${fmt.money(S7.total)} / 집행 광고비 ${fmt.money(S7.spend)} → <b class="${stop?'down':'up'}">${stop?'자동 중지 대상':'해당 없음'}</b></span></li><li><span>자동 중지와 규칙 실행은 광고주 알림 수단(이메일·앱 푸시, 계정 설정)으로 알립니다. 예시에서는 '규칙 실행 내역'에 기록만 합니다.</span></li></ul><span class="chip">${esc(state.brand||'광고주 전체')} · 알림 수단: 계정 설정(예시)</span>`;
+  document.getElementById('rulesSys').innerHTML=`<ul class="notice" style="margin-bottom:8px"><li><span>최근 7일간 <b>전체 매출</b>보다 <b>전체 집행 광고비</b>가 많이 발생할 경우 모든 캠페인이 자동으로 일시정지됩니다. 지금: 전체 매출 ${fmt.money(S7.total)} / 집행 광고비 ${fmt.money(S7.spend)} → <b class="${stop?'down':'up'}">${stop?'자동 중지 대상':'해당 없음'}</b></span></li><li><span>자동 중지와 규칙 실행은 광고주 알림 수단(이메일·앱 푸시, 계정 설정)으로 알립니다. 실행 결과는 '규칙 실행 내역'에 기록됩니다.</span></li></ul><span class="chip">${esc(state.brand||'광고주 전체')} · 알림 수단: 계정 설정</span>`;
   document.getElementById('ruCount').textContent=`${rules.length}개`;
   document.getElementById('ruTable').innerHTML=rules.length?`<table class="data"><thead><tr><th>ON/OFF</th><th>적용 캠페인</th><th>규칙</th><th class="num">지금 해당</th><th>생성일</th><th>규칙 실행 내역</th><th>수정</th></tr></thead><tbody>${rules.map(r=>{const tpl=RULE_TEMPLATES.find(t=>t.id===r.tpl);const hits=r.on?ruleHits(r,BASE_DATE).length:0;return `<tr><td><button type="button" class="tog" role="switch" aria-checked="${r.on}" data-rutog="${r.id}" aria-label="규칙 켜기/끄기"></button></td><td>${esc(scopeLabel(r.scope))}</td><td><span class="nm">${esc(tpl.name)}</span><span class="sm">${esc(tpl.cond(r.val))} → ${esc(tpl.actions[r.action]||tpl.actions[0])}</span></td>${td(hits?`<span class="pill ${r.action===1?'sev':'warn'}">${hits}건</span>`:'<span class="muted">0건</span>',1)}<td>${r.created}</td><td><button type="button" class="btn small" data-rulog="${r.id}">내역 보기</button></td><td><button type="button" class="btn small" data-rudel="${r.id}">삭제</button></td></tr>`;}).join('')}</tbody></table>`:'<div class="empty">자동규칙이 없습니다.</div>';
   const f=document.getElementById('ruForm');f.hidden=!state.ruOpen;
@@ -1756,7 +1755,7 @@ function createRule(scope,tpl,val,action){const t=RULE_TEMPLATES.find(x=>x.id===
 
 /* ---------- 상세페이지 관리 ---------- */
 function renderDetail(){
-  document.getElementById('dpHero').innerHTML=`<div class="alert warn" style="margin:0 0 12px"><b>안내</b><span>상세 페이지 편집툴로 만든 모바일 상세 페이지의 운영 상태와 성과를 봅니다. 새 템플릿으로 만든 상세 페이지는 <b>모바일에서만</b> 적용되고 PC는 기존 상세 페이지가 보입니다(예시 정의). 기존 광고 성과를 바탕으로 예측·권장하는 내용이라 실제 효과와 다를 수 있습니다.</span></div><div class="grid2 wide"><div><h3>기존 상품 상세페이지를 고객에게 "팔리는 상세페이지"로 새롭게 만들어보세요</h3><div class="desc">광고로 유입된 고객의 구매 의사결정을 도와 <b>구매 전환율 상승과 목표 광고수익률 달성</b>을 기대할 수 있습니다. 템플릿 3종(이미지형·비교형·영상형)을 제공합니다.</div></div><div class="steps" style="margin-top:0;grid-template-columns:1fr 1fr"><div><b>1 상품 선택</b>광고 중이거나 기회 상품인 것부터</div><div><b>2 템플릿·소재</b>핵심 포인트 3개, 비교표, 영상</div><div><b>3 검수</b>표시·광고 기준 확인</div><div><b>4 적용</b>모바일 상세에 반영, 전환율 추적</div></div></div>`;
+  document.getElementById('dpHero').innerHTML=`<div class="alert warn" style="margin:0 0 12px"><b>안내</b><span>상세 페이지 편집툴로 만든 모바일 상세 페이지의 운영 상태와 성과를 봅니다. 새 템플릿으로 만든 상세 페이지는 <b>모바일에서만</b> 적용되고 PC는 기존 상세 페이지가 보입니다. 기존 광고 성과를 바탕으로 예측·권장하는 내용이라 실제 효과와 다를 수 있습니다.</span></div><div class="grid2 wide"><div><h3>기존 상품 상세페이지를 고객에게 "팔리는 상세페이지"로 새롭게 만들어보세요</h3><div class="desc">광고로 유입된 고객의 구매 의사결정을 도와 <b>구매 전환율 상승과 목표 광고수익률 달성</b>을 기대할 수 있습니다. 템플릿 3종(이미지형·비교형·영상형)을 제공합니다.</div></div><div class="steps" style="margin-top:0;grid-template-columns:1fr 1fr"><div><b>1 상품 선택</b>광고 중이거나 기회 상품인 것부터</div><div><b>2 템플릿·소재</b>핵심 포인트 3개, 비교표, 영상</div><div><b>3 검수</b>표시·광고 기준 확인</div><div><b>4 적용</b>모바일 상세에 반영, 전환율 추적</div></div></div>`;
   document.getElementById('dpSeg').innerHTML=['','운영 중','임시저장','검수 중'].map(s=>`<button type="button" data-dps="${s}" aria-pressed="${state.dpStatus===s}">${s||'전체'}</button>`).join('');
   const days=dayCount(P.cur.from,P.cur.to);
   const vis=detailPages.filter(d=>(!state.brand||d.p.brand===state.brand)&&(!state.dpStatus||d.status===state.dpStatus));
@@ -1791,8 +1790,8 @@ function renderSales(){
   const cats=[...new Set(products.map(p=>p.cat))].sort((a,b)=>a.localeCompare(b,'ko'));
   document.getElementById('slCat').innerHTML='<option value="">카테고리 전체</option>'+cats.map(c=>`<option value="${esc(c)}" ${state.cat===c?'selected':''}>${esc(c)}</option>`).join('');document.getElementById('slCat').value=state.cat;
   const rows=salesRows(P.cur),prev=salesRows(P.prev,true);const S=sumS(rows),SP=sumS(prev);const A=sum(rowsFor(P.cur));
-  document.getElementById('slBasis').textContent=` ${describeRange(P.cur)} · 비교 ${P.prev.label} · 판매자 인사이트 수치는 가상(광고 데이터와 별도 원천)`;
-  document.getElementById('slKpis').innerHTML=[tile('방문자',fmt.cnt(S.visitors),deltaHTML(S.visitors,SP.visitors,'cnt'),'','상품 상세를 본 순 방문자(가상)'),tile('조회',fmt.cnt(S.views),deltaHTML(S.views,SP.views,'cnt')),tile('장바구니',fmt.cnt(S.cart),deltaHTML(S.cart,SP.cart,'cnt')),tile('주문',fmt.cnt(S.orders),deltaHTML(S.orders,SP.orders,'cnt')),tile('구매전환율',fmt.pct2(S.cvr),deltaHTML(S.cvr,SP.cvr,'pct'),'','주문 ÷ 방문자'),tile('판매량',fmt.cnt(S.qty),deltaHTML(S.qty,SP.qty,'cnt')),tile('매출',fmt.money(S.rev),deltaHTML(S.rev,SP.rev,'money'),'','반품·취소와 무관한 최종 판매가 기준(예시 정의)'),tile('광고 성과',`${fmt.money(A.direct)}<small>광고 매출</small>`,`<span class="goal">집행 광고비 ${fmt.money(A.spend)} · 광고수익률 ${fmt.pct(A.roas)}</span>`,'','광고센터 데이터(캠페인 × 일자)와 같은 값')].join('');
+  document.getElementById('slBasis').textContent=` ${describeRange(P.cur)} · 비교 ${P.prev.label}`;
+  document.getElementById('slKpis').innerHTML=[tile('방문자',fmt.cnt(S.visitors),deltaHTML(S.visitors,SP.visitors,'cnt'),'','상품 상세를 본 순 방문자'),tile('조회',fmt.cnt(S.views),deltaHTML(S.views,SP.views,'cnt')),tile('장바구니',fmt.cnt(S.cart),deltaHTML(S.cart,SP.cart,'cnt')),tile('주문',fmt.cnt(S.orders),deltaHTML(S.orders,SP.orders,'cnt')),tile('구매전환율',fmt.pct2(S.cvr),deltaHTML(S.cvr,SP.cvr,'pct'),'','주문 ÷ 방문자'),tile('판매량',fmt.cnt(S.qty),deltaHTML(S.qty,SP.qty,'cnt')),tile('매출',fmt.money(S.rev),deltaHTML(S.rev,SP.rev,'money'),'','반품·취소와 무관한 최종 판매가 기준'),tile('광고 성과',`${fmt.money(A.direct)}<small>광고 매출</small>`,`<span class="goal">집행 광고비 ${fmt.money(A.spend)} · 광고수익률 ${fmt.pct(A.roas)}</span>`,'','광고센터 데이터(캠페인 × 일자)와 같은 값')].join('');
   const n=dayCount(P.cur.from,P.cur.to);const labels=[];for(let i=0;i<n;i++)labels.push(addDays(P.cur.from,i).slice(5));
   const revD=dailySplit(S.rev,P.cur),qtyD=dailySplit(S.qty,P.cur);
   let L=labels,Rv=revD,Q=qtyD;if(n>62){L=[];Rv=[];Q=[];for(let i=0;i<n;i+=7){L.push(labels[i]+'~');Rv.push(revD.slice(i,i+7).reduce((a,b)=>a+b,0));Q.push(qtyD.slice(i,i+7).reduce((a,b)=>a+b,0));}}
@@ -1805,7 +1804,7 @@ function renderSales(){
   document.getElementById('slTabs').innerHTML=[['all','전체',rows.length],['sold','판매된 상품',sold],['none','판매 없는 상품',rows.length-sold]].map(t=>`<button type="button" data-sltab="${t[0]}" aria-selected="${state.slTab===t[0]}">${t[1]} <span class="n">(${t[2]})</span></button>`).join('');
   let vis=rows.filter(r=>state.slTab==='all'||(state.slTab==='sold'?r.qty>0:r.qty===0));
   const keyOf={rev:r=>r.rev,qty:r=>r.qty,visit:r=>r.visitors,cvr:r=>r.cvr}[state.slSort]||(r=>r.rev);vis.sort((a,b)=>keyOf(b)-keyOf(a));
-  document.getElementById('slSort').value=state.slSort;document.getElementById('slCount').textContent=`${vis.length}개 상품 · 트래픽·전환율은 전일 23:59, 매출은 당일 집계(예시)`;
+  document.getElementById('slSort').value=state.slSort;document.getElementById('slCount').textContent=`${vis.length}개 상품 · 트래픽·전환율은 전일 23:59, 매출은 당일 집계`;
   const prevMap=new Map(prev.map(r=>[r.p.id,r]));
   const chg=(a,b)=>{if(!b)return '<span class="flat">—</span>';const d=(a-b)/b;return `<span class="${d>=0?'up':'down'}">${d>=0?'↗':'↘'} ${fmt.pct1(Math.abs(d))}</span>`;};
   state._sales={header:['상품 ID','상품명','브랜드','카테고리','방문자','조회','장바구니','주문','구매전환율(%)','판매량','매출'],rows:vis.map(r=>[r.p.id,r.p.name,r.p.brand,r.p.cat,r.visitors,r.views,r.cart,r.orders,(r.cvr*100).toFixed(2),r.qty,r.rev])};
@@ -1821,7 +1820,7 @@ function trafficAgg(kind,list){const names=kind==='in'?SRC_IN:SRC_OUT;const v=na
 function renderTraffic(){
   document.getElementById('trTabs').innerHTML=[['in','내부 유입'],['out','외부 유입 <span class="new" style="font-size:9px;background:#e2792b;color:#fff;border-radius:4px;padding:1px 4px;font-weight:800">NEW</span>'],['partner','파트너 캠페인']].map(t=>`<button type="button" data-tt="${t[0]}" aria-selected="${state.trTab===t[0]}">${t[1]}</button>`).join('')+`<span class="muted" style="margin-left:auto;align-self:center;font-size:12px">내부 유입과 외부 유입은 중복 집계되므로 두 값의 합이 전체 유입 수와 다를 수 있습니다.</span>`;
   const body=document.getElementById('trBody');
-  if(state.trTab==='partner'){body.innerHTML=`<div class="card"><h3>파트너 캠페인</h3><div class="desc">제휴 파트너(인플루언서·제휴 채널·공동 프로모션)별 유입과 전환 성과를 보는 화면입니다. Hmall의 제휴 마케팅 체계와 추적 링크 규격(UTM·제휴 코드)이 정해진 뒤 만듭니다(예시 범위 밖).</div><div class="empty">파트너 캠페인 데이터가 없습니다. 개발 논의에서 범위와 추적 방식을 정합니다.</div></div>`;return;}
+  if(state.trTab==='partner'){body.innerHTML=`<div class="card"><h3>파트너 캠페인</h3><div class="desc">제휴 파트너(인플루언서·제휴 채널·공동 프로모션)별 유입과 전환 성과를 보는 화면입니다. Hmall의 제휴 마케팅 체계와 추적 링크 규격(UTM·제휴 코드)이 정해진 뒤 만듭니다.</div><div class="empty">파트너 캠페인 데이터가 없습니다. 개발 논의에서 범위와 추적 방식을 정합니다.</div></div>`;return;}
   const rows=salesRows(P.cur),prev=salesRows(P.prev,true);
   const cur=trafficAgg(state.trTab,rows),pv=trafficAgg(state.trTab,prev);const tot=cur.reduce((a,x)=>a+x.v,0),totP=pv.reduce((a,x)=>a+x.v,0);
   cur.sort((a,b)=>b.v-a.v);const top=cur[0]||{n:'-',v:0};const names=state.trTab==='in'?SRC_IN:SRC_OUT;
@@ -1941,7 +1940,7 @@ function render(push){
   const title=state.view==='scope'?(SCOPE_INFO[state.scope]||SCOPE_INFO.reco)[0]:VIEW_TITLE[state.view];
   document.getElementById('pageTitle').textContent=title;
   document.getElementById('crumbs').innerHTML=`${esc(APP.name)} › <b>${esc(title)}</b>`;
-  document.title=`${title} · ${APP.name} 예시`;
+  document.title=`${title} · ${APP.name}`;
   document.getElementById('pageSub').textContent=`광고주 ${state.brand||'전체(관리자 보기)'} · ${describeRange(P.cur)} · 증감 비교: ${P.prev.label}`;
   document.getElementById('acctName').textContent=state.brand?state.brand:'광고주 전체 보기';
   document.getElementById('acctCode').textContent=state.brand?'B'+String(BRANDS.indexOf(state.brand)+1).padStart(4,'0'):'ALL';
@@ -1952,7 +1951,7 @@ function render(push){
   document.getElementById('fFrom').value=P.cur.from;document.getElementById('fTo').value=P.cur.to;
   document.getElementById('rangeText').textContent=`${P.cur.from} ~ ${P.cur.to} (${dayCount(P.cur.from,P.cur.to)}일)`;
   document.getElementById('cmpNote').textContent=`증감 비교: ${P.prev.label} (${P.prev.from} ~ ${P.prev.to})`;
-  document.getElementById('headActions').innerHTML=state.view==='campaign'?`<button type="button" class="btn primary" data-go="create">+ 광고 만들기</button>`:state.view==='product'?`<span class="muted" style="font-size:12px;align-self:center">검색량·추이는 가상값입니다</span>`:'';
+  document.getElementById('headActions').innerHTML=state.view==='campaign'?`<button type="button" class="btn primary" data-go="create">+ 광고 만들기</button>`:'';
   const inP=rowsFor(P.cur);document.getElementById('nSales').textContent=inP.filter(c=>c.goal==='sales').length;document.getElementById('nNewc').textContent=inP.filter(c=>c.goal==='newc').length;
   switch(state.view){case 'home':renderHome();break;case 'campaign':renderCampaign();break;case 'product':renderProduct();break;case 'report':renderReport();break;case 'create':renderCreate();break;case 'scope':renderScope();break;case 'history':renderHistory();break;case 'budget':renderShared();break;case 'rules':renderRules();break;case 'detail':renderDetail();break;case 'display':renderDisplay();break;case 'sales':renderSales();break;case 'traffic':renderTraffic();break;default:break;}
   syncHash(push);
@@ -2112,8 +2111,7 @@ window.addEventListener('hashchange',()=>{if(serialize()!==location.hash.replace
 /* ---------- 시작 ---------- */
 document.getElementById('appName').innerHTML=`${esc(APP.name)}<small id="appTag">${esc(APP.tag)}</small>`;
 document.getElementById('appFoot').innerHTML=`기준일 ${META.baseDate} 마감<br>데이터 파이프라인 ${esc(META.pipeline)} / 단가 ${esc(META.priceBook)}<br>화면 ${APP.version} · ${APP.build} · ${META.dataKind}`;
-document.getElementById('chipBase').textContent=`기준일 ${META.baseDate} 마감`;document.getElementById('chipMock').textContent=META.dataKind;
-document.getElementById('alertText').textContent=`이 화면의 수치는 가상 데이터입니다(광고 성과 센터와 같은 생성부, 기준일 ${META.baseDate}). 신규 구매 고객·참여수·정산 금액·판매자 인사이트(방문·조회·유입경로) 등 예시 전용 지표는 정의 확정 전의 가상값이며, 목표·상태 변경·규칙·예산·보고서 요청은 화면 안에서만 반영되고 저장되지 않습니다.`;
+document.getElementById('chipBase').textContent=`기준일 ${META.baseDate} 마감`;
 document.getElementById('verInfo').textContent=`화면 ${APP.version} (${APP.build} 빌드) · 데이터 기준일 ${META.baseDate} · 데이터 구분: ${META.dataKind} · 지표 정의와 링크 규칙은 '기준 안내'`;
 document.getElementById('fBrand').innerHTML='<option value="">광고주 전체 (관리자 보기)</option>'+BRANDS.map(b=>`<option value="${esc(b)}">${esc(b)}</option>`).join('');
 document.getElementById('bTab').innerHTML='<option value="">전체</option>'+TAB_ORDER.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
@@ -2122,6 +2120,6 @@ applyHash();
 render();
 })();
 </script>
-<!-- 공개용 게시본 v2.1 (2026-10-27) -->
+<!-- 공개용 게시본 v2.2 (2026-10-30) -->
 </body>
 </html>
