@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex,nofollow">
 <!-- 공개용 게시본입니다. 이 파일을 직접 고치지 마세요(정본에서 다시 생성합니다). -->
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>광고 성과 센터 목업</title>
+<title>광고 성과 센터</title>
 <style>
 /* 레이아웃 개념: 좌측 고정 내비 + 상단 필터 행 1줄 + 본문(요약 타일 → 구좌 비교 → 일별 추이 → 표). 모든 수치는 가상 데이터. */
 :root{
@@ -44,15 +44,18 @@ button{cursor:pointer}
 @media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
 
 .app{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:100vh}
-.nav{background:var(--surface);border-right:1px solid var(--line);padding:18px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px}
-.brand{font-weight:700;font-size:16px;letter-spacing:-.01em;padding:4px 8px 2px}
-.brand small{display:block;font-weight:500;font-size:12px;color:var(--muted);margin-top:2px}
-.badge{display:inline-block;margin:8px 8px 14px;padding:3px 8px;border-radius:999px;background:var(--accent-wash);color:var(--accent);font-size:11px;font-weight:600;letter-spacing:.02em}
-.nav button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;border:0;padding:9px 10px;border-radius:8px;color:var(--ink-2);font-weight:500}
-.nav button:hover{background:var(--surface-2)}
-.nav button[aria-current="page"]{background:var(--accent-wash);color:var(--accent);font-weight:600}
+/* 왼쪽 메뉴(v2.6, CR-045): 통합 광고센터와 같은 진한 남색 바탕 */
+:root{--nav-bg:#1b2330;--nav-ink:#c8d0dc;--nav-active:#2b3a52}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--nav-bg:#12161d;--nav-ink:#b9c1cd;--nav-active:#243044}}
+:root[data-theme="dark"]{--nav-bg:#12161d;--nav-ink:#b9c1cd;--nav-active:#243044}
+.nav{background:var(--nav-bg);color:var(--nav-ink);border-right:1px solid var(--nav-bg);padding:18px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px}
+.brand{font-weight:700;font-size:16px;letter-spacing:-.01em;padding:4px 8px 2px;color:#fff}
+.brand small{display:block;font-weight:500;font-size:12px;color:var(--nav-ink);opacity:.85;margin-top:2px;margin-bottom:12px}
+.nav button{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;border:0;padding:9px 10px;border-radius:8px;color:var(--nav-ink);font-weight:500}
+.nav button:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav button[aria-current="page"]{background:var(--nav-active);color:#fff;font-weight:700}
 .nav .spacer{flex:1}
-.nav .foot{font-size:11px;color:var(--muted);padding:8px 10px;line-height:1.5}
+.nav .foot{font-size:11px;color:var(--nav-ink);opacity:.75;padding:8px 10px;line-height:1.5}
 
 main{min-width:0;padding:20px 24px 48px}
 .head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px}
@@ -179,7 +182,7 @@ tr.noexec td{color:var(--muted)}
 @media (max-width:1100px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.grid2{grid-template-columns:1fr}}
 @media (max-width:860px){
   .app{grid-template-columns:1fr}
-  .nav{position:static;height:auto;flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--line);padding:10px 12px}
+  .nav{position:static;height:auto;flex-direction:row;flex-wrap:wrap;border-right:0;border-bottom:1px solid var(--nav-bg);padding:10px 12px}
   .nav .brand{flex-basis:100%}.nav .spacer,.nav .foot{display:none}.nav button{width:auto}
   main{padding:14px 16px 40px}
   .trends{grid-template-columns:1fr}
@@ -308,7 +311,6 @@ tr.tsum td.flat{font-weight:500;font-size:11.5px}
 <div class="app">
   <aside class="nav">
     <div class="brand"><span id="appName">광고 성과 센터</span><small id="appTag">모바일 광고 구좌 성과 조회</small></div>
-    <span class="badge" id="appBadge">가상 데이터 · 목업 v2.5</span>
     <button type="button" data-view="home" aria-current="page">광고 요약</button>
     <button type="button" data-view="md">MD별 성과</button>
     <button type="button" data-view="campaign">캠페인(배너)</button>
@@ -316,15 +318,14 @@ tr.tsum td.flat{font-weight:500;font-size:11.5px}
     <button type="button" data-view="shot">구좌별 현황</button>
     <button type="button" data-view="guide">기준 안내</button>
     <div class="spacer"></div>
-    <div class="foot" id="appFoot">기준일 2026-06-30 마감<br>데이터 파이프라인 내부 집계 / 단가 26.08 단가표</div>
+    <div class="foot" id="appFoot">가상 데이터 · 2026-06-30 · v2.6</div>
   </aside>
 
   <main>
     <div class="head">
       <div>
         <h1 id="pageTitle">광고 요약</h1>
-        <div class="sub" id="pageSub">선택 기간의 광고 배너 성과를 전년 동월 값과 비교합니다. 모든 수치는 가상 데이터입니다.</div>
-        <div class="chips" id="chips"></div>
+        <div class="sub" id="pageSub">선택 기간의 광고 배너 성과를 전년 동월 값과 비교합니다.</div>
       </div>
       <div class="actions">
         <a class="btn" id="btnGuide" href="https://hmall-ad-map.vercel.app/" target="_blank" rel="noopener noreferrer" title="구좌 위치를 보여주는 광고 구좌 안내 페이지를 새 창으로 엽니다">광고 구좌 안내</a>
@@ -409,13 +410,13 @@ tr.tsum td.flat{font-weight:500;font-size:11.5px}
 
     <!-- 구좌 -->
     <section class="view" id="view-slot" hidden>
-      <div class="section-title"><h2>광고 구좌 비교</h2><span class="hint">단가는 26.08 광고상품 단가표 기준(만원/일). 12시간·1시간·7일·1회 발송 단위 구좌는 표의 '단위'를 따르고, 10/40처럼 구간 단가인 구좌는 목업에서 최고 구간으로 계산합니다. 단가표에 없는 구좌는 목록에 없습니다.</span></div>
+      <div class="section-title"><h2>광고 구좌 비교</h2><span class="hint">단가는 26.08 광고상품 단가표 기준(만원/일). 12시간·1시간·7일·1회 발송 단위 구좌는 표의 '단위'를 따르고, 10/40처럼 구간 단가인 구좌는 최고 구간으로 계산합니다. 단가표에 없는 구좌는 목록에 없습니다.</span></div>
       <div class="card"><div class="tablebar end"><span class="acts"><button type="button" class="btn sm" id="sCsv">CSV 내려받기</button></span></div><div class="tw"><table class="data" id="slotTable"></table></div></div>
     </section>
 
     <!-- 구좌별 현황 -->
     <section class="view" id="view-shot" hidden>
-      <div class="section-title"><h2>구좌별 현황</h2><span class="hint">광고 구좌 안내 페이지와 같은 순서로 영역 → 구좌 → 위치를 고르면 앱 화면 캡처(점선 상자가 구좌 위치)와 선택 기간 성과가 보입니다. 캡처는 위치를 보여주기 위한 예시이며 실제 노출 소재가 아닙니다. 이 탭에는 상단의 광고 구좌 필터가 적용되지 않습니다(팀·MD·브랜드·기간은 적용). 수치는 가상 데이터입니다.</span></div>
+      <div class="section-title"><h2>구좌별 현황</h2><span class="hint">광고 구좌 안내 페이지와 같은 순서로 영역 → 구좌 → 위치를 고르면 앱 화면 캡처(점선 상자가 구좌 위치)와 선택 기간 성과가 보입니다. 캡처는 위치를 보여주기 위한 예시이며 실제 노출 소재가 아닙니다. 이 탭에는 상단의 광고 구좌 필터가 적용되지 않습니다(팀·MD·브랜드·기간은 적용).</span></div>
       <div class="card shot-nav"><div class="shot-groups" id="shotGroups"></div><div class="shot-fams" id="shotFams"></div></div>
       <div class="card shot-detail" id="shotDetail"></div>
     </section>
@@ -465,7 +466,7 @@ tr.tsum td.flat{font-weight:500;font-size:11.5px}
 (function(){
 'use strict';
 /* ---------- 앱·기준 상수: 명칭·기준일·버전은 여기서만 바꾼다 (운영 시 meta.json 값으로 대체 예정) ---------- */
-const APP={name:'광고 성과 센터',tag:'모바일 광고 구좌 성과 조회',version:'v2.5',build:'2026-10-27'};
+const APP={name:'광고 성과 센터',tag:'모바일 광고 구좌 성과 조회',version:'v2.6',build:'2026-10-30'};
 const META={baseDate:'2026-06-30',pipeline:'내부 집계',priceBook:'26.08 단가표',dataKind:'가상 데이터',mock:true};
 /* ---------- 가상 데이터 생성 (시드 고정) ---------- */
 function rng(seed){return function(){seed|=0;seed=seed+0x6D2B79F5|0;let t=Math.imul(seed^seed>>>15,1|seed);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;}}
@@ -1335,7 +1336,7 @@ function csvSlots(){
     ...rows.map(r=>[r.s.name,r.s.tab,r.s.rateLabel,r.s.unit,r.c.campaigns,r.days,r.c.spend,r.c.total,r.c.spend?pctOut(r.c.roas):'',r.c.clicks,r.p.spend?pctOut(r.p.roas):'',(r.p.spend&&r.c.spend)?pctOut(r.c.roas-r.p.roas):''])])];
 }
 
-const TITLES={home:['광고 요약','선택 기간(접수일자 기준)의 광고 배너 성과를 {cmp} 값과 비교합니다. 모든 수치는 가상 데이터입니다.'],md:['MD별 성과','MD가 담당한 브랜드와 광고 구좌별 성과를 한 번에 봅니다.'],campaign:['캠페인(배너) 목록','선택 기간에 진행된 광고 배너를 캠페인 단위로 봅니다.'],slot:['광고 구좌 비교','구좌별 단가와 성과를 가로로 비교합니다.'],shot:['구좌별 현황','영역 → 구좌 → 위치를 고르면 앱 화면 캡처(점선 상자가 구좌 위치)와 선택 기간 성과가 보입니다.'],guide:['기준 안내','지표 정의와 집계 기준입니다.']};
+const TITLES={home:['광고 요약','선택 기간의 광고 배너 성과를 {cmp} 값과 비교합니다.'],md:['MD별 성과','MD가 담당한 브랜드와 광고 구좌별 성과를 한 번에 봅니다.'],campaign:['캠페인(배너) 목록','선택 기간에 진행된 광고 배너를 캠페인 단위로 봅니다.'],slot:['광고 구좌 비교','구좌별 단가와 성과를 가로로 비교합니다.'],shot:['구좌별 현황','영역 → 구좌 → 위치를 고르면 앱 화면 캡처(점선 상자가 구좌 위치)와 선택 기간 성과가 보입니다.'],guide:['기준 안내','지표 정의와 집계 기준입니다.']};
 
 /* ---------- URL 상태: 링크에 화면·필터를 담는다 (#v=&p=&c=&t=&m=&b=&s=&g=&q=&o=&e=) ---------- */
 /* 허용 값 목록에 있는 값만 받아들이고, MD-팀-브랜드 관계가 어긋나면 해당 값을 버린다. */
@@ -1504,14 +1505,12 @@ document.getElementById('fPresets').addEventListener('click',e=>{const b=pickBtn
 /* ---------- 시작 ---------- */
 document.getElementById('appName').textContent=APP.name;
 document.getElementById('appTag').textContent=APP.tag;
-document.getElementById('appBadge').textContent=META.mock?`${META.dataKind} · 목업 ${APP.version}`:APP.version;
-document.getElementById('appFoot').innerHTML=`기준일 ${META.baseDate} 마감<br>데이터 파이프라인 ${META.pipeline} / 단가 ${META.priceBook}<br>화면 ${APP.version} · ${APP.build}`;
-document.getElementById('chips').innerHTML=`<span class="chip base">기준일 ${META.baseDate} 마감</span>${META.mock?`<span class="chip mock">${META.dataKind}</span>`:''}`;
+document.getElementById('appFoot').textContent=`${META.mock?META.dataKind+' · ':''}${META.baseDate} · ${APP.version}`;
 document.getElementById('verInfo').textContent=`화면 ${APP.version} (${APP.build} 빌드) · 데이터 기준일 ${META.baseDate} · 데이터 구분: ${META.dataKind}`;
 applyHash();
 render();
 })();
 </script>
-<!-- 공개용 게시본 v2.5 (2026-10-27) -->
+<!-- 공개용 게시본 v2.6 (2026-10-30) -->
 </body>
 </html>
