@@ -39,7 +39,7 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;font-size:13.5px;line-height:1.45}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI","Malgun Gothic","Apple SD Gothic Neo",sans-serif;font-size:13.5px;line-height:1.45;word-break:keep-all;overflow-wrap:anywhere}
 button,select,input{font:inherit;color:inherit}
 button{cursor:pointer}
 a{color:var(--accent)}
@@ -48,7 +48,10 @@ a{color:var(--accent)}
 
 /* ---------- 상단 바 ---------- */
 .top{position:sticky;top:0;z-index:20;display:flex;align-items:center;gap:10px;height:52px;padding:0 14px;background:var(--top-bg);border-bottom:1px solid var(--line)}
-.top .logo{font-weight:900;font-size:18px;letter-spacing:-.02em;color:var(--accent);display:flex;align-items:center;gap:8px}
+.top .navtog{border:1px solid var(--line);background:var(--surface);border-radius:4px;width:30px;height:30px;font-size:17px;line-height:1;color:var(--ink-2);display:inline-flex;align-items:center;justify-content:center;padding:0}
+.top .navtog:hover{border-color:var(--accent-soft);color:var(--accent)}
+.top .navtog[aria-expanded="false"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.top .logo{font-weight:900;font-size:18px;letter-spacing:-.02em;color:var(--accent);display:flex;align-items:center;gap:8px;white-space:nowrap}
 .top .logo small{font-weight:600;font-size:12px;color:var(--ink-2);letter-spacing:0}
 .top .sp{flex:1}
 .top .srch{display:flex;align-items:center;gap:6px;border:1px solid var(--accent-soft);border-radius:4px;padding:5px 8px;background:var(--surface);min-width:210px;color:var(--muted);font-size:12.5px}
@@ -59,20 +62,24 @@ a{color:var(--accent)}
 .top .btn.sm{padding:4px 8px}
 
 /* ---------- 레이아웃 ---------- */
-.app{display:grid;grid-template-columns:212px minmax(0,1fr);min-height:calc(100vh - 52px)}
+.app{display:grid;grid-template-columns:236px minmax(0,1fr);min-height:calc(100vh - 52px)}
+.app.navoff{grid-template-columns:minmax(0,1fr)}
+.app.navoff .nav{display:none}
 .nav{background:var(--nav-bg);color:var(--nav-ink);border-right:1px solid var(--line);position:sticky;top:52px;height:calc(100vh - 52px);overflow:auto;padding:4px 0 20px;font-size:13.5px}
-.nav .grp{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line-2);padding:12px 16px;color:var(--nav-ink);font-weight:600}
-.nav .grp .chev{font-size:11px;color:var(--muted);transition:transform .15s}
+.nav .grp{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line-2);padding:11px 14px 11px 16px;color:var(--nav-ink);font-weight:600;line-height:1.4}
+.nav .grp .gl{display:flex;align-items:center;gap:8px;flex:1;min-width:0}
+.nav .grp .chev{font-size:11px;color:var(--muted);transition:transform .15s;flex:none}
 .nav .grp[aria-expanded="true"] .chev{transform:rotate(180deg)}
 .nav .grp.hot{color:var(--accent)}
 .nav .sub{display:none;background:var(--surface-2);padding:4px 0;border-bottom:1px solid var(--line-2)}
 .nav .sub.open{display:block}
-.nav button.item{display:flex;align-items:center;gap:8px;width:100%;text-align:left;background:none;border:0;padding:8px 16px 8px 22px;color:var(--nav-ink);font-size:13px}
-.nav button.item::before{content:'•';color:var(--muted);font-size:10px}
+.nav button.item{display:block;position:relative;width:100%;text-align:left;background:none;border:0;padding:8px 14px 8px 30px;color:var(--nav-ink);font-size:13px;line-height:1.45}
+.nav button.item::before{content:'•';position:absolute;left:18px;top:8px;color:var(--muted);font-size:10px}
 .nav button.item:hover{background:var(--accent-wash);color:var(--accent)}
 .nav button.item[aria-current="page"]{background:var(--accent);color:#fff;font-weight:700}
 .nav button.item[aria-current="page"]::before{color:#fff}
 .nav button.item.top1{padding-left:16px;font-weight:600;border-bottom:1px solid var(--line-2);padding-top:12px;padding-bottom:12px}
+.nav button.item[aria-current="page"] .dot{background:#fff}
 .nav button.item.top1::before{content:none}
 .nav button.item.dim{color:var(--muted)}
 .nav .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#e23b6b}
@@ -87,8 +94,9 @@ a{color:var(--accent)}
 .pagehead{display:flex;align-items:baseline;gap:10px;margin:4px 0 12px}
 .pagehead h1{font-size:19px;margin:0;font-weight:800;letter-spacing:-.01em}
 .pagehead .man{font-size:12px;color:var(--accent)}
-.note{display:flex;align-items:center;gap:6px;color:var(--ink-2);font-size:12.5px;margin:0 0 10px}
-.note .i{display:inline-flex;width:14px;height:14px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;align-items:center;justify-content:center;font-weight:700}
+.pagehead .crumb{font-size:12.5px;color:var(--muted);font-weight:600;white-space:nowrap}
+.note{display:flex;align-items:flex-start;gap:6px;color:var(--ink-2);font-size:12.5px;line-height:1.5;margin:0 0 10px}
+.note .i{flex:none;margin-top:2px;display:inline-flex;width:14px;height:14px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;align-items:center;justify-content:center;font-weight:700}
 .muted{color:var(--muted)} .small{font-size:12px} .b{font-weight:700} .accent{color:var(--accent)}
 .up{color:var(--up)} .down{color:var(--down)} .bad{color:var(--bad)} .good{color:var(--good)}
 .hidden{display:none!important}
@@ -107,16 +115,14 @@ a{color:var(--accent)}
 select.sel,input.inp{border:1px solid var(--line);border-radius:4px;padding:5px 8px;background:var(--surface);font-size:12.5px;min-width:0}
 input.inp.date{width:124px}
 .filter{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 12px;margin-bottom:10px;font-size:12.5px}
-.filter .lab{font-weight:700;color:var(--ink-2)}
+.filter .lab{font-weight:700;color:var(--ink-2);white-space:nowrap}
 .filter .radio{display:inline-flex;align-items:center;gap:4px}
+.filter .radios{display:inline-flex;align-items:center;gap:10px;white-space:nowrap}
 .filter .radio input{accent-color:var(--accent)}
 .filter.box{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;padding:0;overflow:hidden}
 .filter.box .cell{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--line-2)}
 .filter.box .cell .lab{background:var(--surface-3);padding:8px 10px;margin:-8px 0 -8px -12px;min-width:92px;color:var(--accent-dark);font-weight:700}
 .filter.box .act{grid-column:1/-1;display:flex;justify-content:center;gap:8px;padding:10px}
-.bi-tabs{display:flex;background:#1d1b24;border-radius:6px 6px 0 0;overflow:hidden}
-.bi-tabs button{flex:1;border:0;background:none;color:#e9e6f2;padding:11px 8px;font-size:14px;font-weight:600}
-.bi-tabs button[aria-pressed="true"]{background:var(--accent);color:#fff}
 .sub-tabs{display:flex;gap:2px;margin:12px 0 8px;border-bottom:1px solid var(--line)}
 .sub-tabs button{border:1px solid var(--line);border-bottom:0;background:var(--surface-2);padding:6px 26px;font-size:12.5px;color:var(--muted);border-radius:6px 6px 0 0}
 .sub-tabs button[aria-pressed="true"]{background:var(--surface);color:var(--accent);font-weight:700;border-color:var(--accent-soft);margin-bottom:-1px;border-bottom:1px solid var(--surface)}
@@ -128,7 +134,7 @@ input.inp.date{width:124px}
 @media (max-width:1280px){.g4,.g5{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:900px){.app{grid-template-columns:1fr}.nav{position:static;height:auto;max-height:260px}.g2,.g3,.g4,.g5,.g21,.g12,.g13{grid-template-columns:1fr}.filter.box{grid-template-columns:1fr}}
 .panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow:hidden;min-width:0}
-.panel>.ph{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--accent);color:#fff;padding:8px 12px;font-weight:800;font-size:14.5px}
+.panel>.ph{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--accent);color:#fff;padding:8px 12px;font-weight:800;font-size:14.5px;line-height:1.3}
 .panel>.ph.lite{background:var(--surface);color:var(--ink);border-bottom:1px solid var(--line);font-size:15px}
 .panel>.ph .more{color:inherit;background:none;border:0;font-size:12px;font-weight:500;opacity:.9}
 .panel>.pb{padding:12px}
@@ -171,7 +177,7 @@ input.inp.date{width:124px}
 .gbar>span{display:flex;align-items:center;justify-content:center;white-space:nowrap;overflow:hidden}
 table.t{width:100%;border-collapse:collapse;font-size:12.5px}
 table.t th,table.t td{padding:7px 8px;border-bottom:1px solid var(--line-2);text-align:left;vertical-align:middle}
-table.t th{background:var(--surface-3);color:var(--ink-2);font-weight:600;text-align:center;border-top:1px solid var(--line)}
+table.t th{background:var(--surface-3);color:var(--ink-2);font-weight:600;text-align:center;border-top:1px solid var(--line);white-space:nowrap}
 table.t td.n,table.t th.n{text-align:right;font-variant-numeric:tabular-nums}
 table.t td.c,table.t th.c{text-align:center}
 table.t tr.sel td{background:var(--accent-wash)}
@@ -280,7 +286,8 @@ tr.cmp td{background:rgba(64,170,230,.14)}
 </head>
 <body>
 <header class="top">
-  <div class="logo">≡ Hmall <span>비즈니스 인사이트</span></div>
+  <button type="button" class="navtog" id="navToggle" aria-controls="nav" aria-expanded="true" title="메뉴 숨기기" aria-label="왼쪽 메뉴 숨기기/보이기">≡</button>
+  <div class="logo">Hmall <span>비즈니스 인사이트</span></div>
   <div class="sp"></div>
   <label class="srch">🔍<input id="ordSearch" placeholder="14자리 또는 23자리 주문번호 입력" aria-label="주문번호 검색"></label>
   <label class="srch">🔍<input id="menuSearch" list="menuList" placeholder="찾으시는 메뉴명을 입력하세요." aria-label="메뉴 검색"><datalist id="menuList"></datalist></label>
@@ -289,10 +296,18 @@ tr.cmp td{background:rgba(64,170,230,.14)}
   <button type="button" class="lnk" id="btnManual">매뉴얼</button>
   <button type="button" class="btn sm" id="saveHtml">HTML 저장</button>
 </header>
-<div class="app">
+<div class="app" id="app">
   <nav class="nav" aria-label="주요 메뉴" id="nav">
     <button type="button" class="item top1" data-view="home">홈</button>
-    <button type="button" class="item top1" data-view="bi"><span class="dot"></span>비즈니스 인사이트</button>
+    <button type="button" class="grp hot" data-grp="bi" aria-expanded="true"><span class="gl"><span class="dot"></span>비즈니스 인사이트</span><span class="chev">▼</span></button>
+    <div class="sub open" data-grp="bi">
+      <button type="button" class="item" data-view="bi" data-bt="daily">데일리 요약</button>
+      <button type="button" class="item" data-view="bi" data-bt="sales">판매 트렌드</button>
+      <button type="button" class="item" data-view="bi" data-bt="inflow">유입 트렌드</button>
+      <button type="button" class="item" data-view="bi" data-bt="compare">비교 분석</button>
+      <button type="button" class="item" data-view="bi" data-bt="ai">AI 데이터 분석</button>
+      <button type="button" class="item" data-view="bi" data-bt="prospect">가망 고객</button>
+    </div>
     <button type="button" class="grp" data-grp="vendor" aria-expanded="false">협력사정보<span class="chev">▼</span></button>
     <div class="sub" data-grp="vendor"><button type="button" class="item dim" data-view="scope" data-scope="vendor">협력사 기본정보 · 담당자관리</button></div>
     <button type="button" class="grp hot" data-grp="contract" aria-expanded="true">전자계약<span class="chev">▼</span></button>
@@ -341,7 +356,7 @@ tr.cmp td{background:rgba(64,170,230,.14)}
 
       <!-- 홈 -->
       <section class="view" id="view-home">
-        <div class="banner">상품 광고 첫 집행 협력사 대상, 광고비 <span class="em">30만원</span> 전액 지원해 드립니다! <span class="go">광고센터 바로가기 ›</span></div>
+        <div class="banner">상품 광고 첫 집행 협력사 대상, 광고비 <span class="em">30만원</span> 전액 지원합니다. <span class="go">광고센터 바로가기 ›</span></div>
         <p class="note"><span class="i">!</span>대시보드를 통해 판매자님의 처리가 필요한 정보를 알려드립니다. 자세한 내용은 각 화면에서 확인해 주세요.</p>
         <div class="cards5" id="homeCards"></div>
         <div class="grid g3" style="margin-top:12px">
@@ -360,7 +375,7 @@ tr.cmp td{background:rgba(64,170,230,.14)}
 
       <!-- 인사이트 -->
       <section class="view" id="view-bi" hidden>
-        <div class="bi-tabs" id="biTabs"></div>
+        <div class="pagehead" id="biHead"></div>
         <div class="filter" id="biFilter"></div>
         <p class="note" id="biNote"></p>
         <div id="biBody"></div>
@@ -465,7 +480,7 @@ tr.cmp td{background:rgba(64,170,230,.14)}
 <script>
 'use strict';
 (function(){
-const APP={name:'Hmall 비즈니스 인사이트',tag:'협력사 파트너 시스템(partners_center)',version:'v1.2',build:'2026-10-30'};
+const APP={name:'Hmall 비즈니스 인사이트',tag:'협력사 파트너 시스템(partners_center)',version:'v1.3',build:'2026-10-30'};
 const META={baseDate:'2026-10-29',dataKind:'가상 데이터',mock:true,source:'파트너스 센터 전용 생성부(시드 20261030)',dataSha:'dbcf625042c0'};
 /* ---------- 가상 데이터 생성 (시드 고정) ---------- */
 /* 파트너스 센터 예시 전용 생성부. 시드 20261030. 광고 성과 센터·통합 광고센터의 생성부와는 별개(협력사 판매 데이터라 같은 수치일 필요가 없음).
@@ -686,13 +701,13 @@ const SCOPE_INFO={
 };
 
 const DEFAULTS={view:'home',bt:'daily',st:'prod',it:'channel',date:BASE_DATE,period:'2026-10-02~2026-10-29',cmp:'2026-09-04~2026-10-01',cm:'prev',pa:-1,fa:-1,brand:'',net:true,pmode:'d',
-  bsel:'',age:-1,otype:'all',kwExt:true,kwIn:true,kwTop:10,cat1:'07:생활/건강',cat2:'0701:주방용품',ai:'',pbrand:'루미홈',
+  navOff:false,bsel:'',age:-1,otype:'all',kwExt:true,kwIn:true,kwTop:10,cat1:'07:생활/건강',cat2:'0701:주방용품',ai:'',pbrand:'루미홈',
   ecMd:'',ecCh:'',ecSt:'',ecSel:'',afSt:'',afSel:'',asSel:'',
   odMode:'day',op:'2026-09-29~2026-10-29',srMode:'week',sp:'2026-10-23~2026-10-29',srType:'',srCode:'',
   bp:'2026-09~2026-10',bu:'qty',tp:'2026-05~2026-10',tc:'',tu:'qty',yp:'2026-08-29~2026-09-29',yc:'',
   scope:'vendor',ntab:'전체',btab:'amt',tip:'',cmpCat:'생활/건강',cmpCat2:'',cmpCh:'',cmpAge:'',cmpPrice:'',cb:'',pcat:-1,prSt:'',prSel:'',prp:'2026-09-15~2026-10-29',modal:''};
 DEFAULTS.tc=PRODUCTS[0].code; DEFAULTS.yc=PRODUCTS[0].code; DEFAULTS.ai=PRODUCTS[0].code;
-const state=Object.assign({},DEFAULTS,{tabs:['home'],open:{contract:true,stat:true}});
+const state=Object.assign({},DEFAULTS,{tabs:['home'],open:{bi:true,contract:true,stat:true}});
 let lastToast='',lastDownload=null;
 
 /* ---------- 기간 ---------- */
@@ -877,49 +892,50 @@ function wordCloudHTML(words){if(!words.length)return '<div class="empty">데이
   return `<div class="wc">${order.map((w)=>{const sz=12+Math.round(Math.sqrt(w.v/max)*20);return `<span style="font-size:${sz}px;color:${cols[words.indexOf(w)%cols.length]}" title="${fmt.n(w.v)}">${esc(w.kw)}</span>`;}).join('')}</div>`;}
 /* 분석 TIP 버튼(패널 머리) */
 const TIPS={
-  bpos:{t:'브랜드 포지셔닝 (단가×수량)',h:'조회기간 vs 비교기간의 브랜드 실적을 한눈에 비교할 수 있어요!',l:['판매 실적 증감 원인을 브랜드 단위로 확인할 수 있어요. 비교기간 대비 실적이 오른 이유는 A브랜드의 영향이 컸구나~ B브랜드는 주문금액이 소폭 감소했네~','브랜드 실적 증감 원인을 상품의 단가×수량 단위로 확인할 수 있어요. 상품 단가는 낮아졌지만 주문수량이 올라서 그랬구나~','주문금액 증감에 영향을 준 상품을 확인할 수 있어요. 브랜드 버블을 클릭하면 [상품별 현황]과 [상품 포지셔닝]에서 그 브랜드 상품의 세부 데이터를 볼 수 있어요.']},
-  pstat:{t:'상품별 현황',h:'주문이 많았던 상품을 확인할 수 있어요!',l:['브랜드별로 주문이 많이 된 상품을 확인할 수 있어요. 왼쪽 [브랜드 포지셔닝]에서 버블을 클릭해 보세요.','상품명을 더블 클릭하면 그 상품을 주문한 고객의 프로파일(구매고객분석)로 이동해요.']},
-  ppos:{t:'상품 포지셔닝 (단가×수량)',h:'주문금액의 증감 원인을 상품의 단가×수량 단위로 분석할 수 있어요!',l:['버블의 분포로 주문금액 증감 원인을 확인해 보세요. 비교기간에는 고단가 상품이 주력이었는데 조회기간에는 저단가 상품이 주력이었구나~','상품 단가 전략이 잘 작동했는지 확인할 수 있어요. 단가를 낮춘 만큼 주문 수량이 늘었구나!']},
-  agec:{t:'연령대별 고객 수',h:'내 브랜드 vs Hmall TV홈쇼핑·인터넷/모바일의 고객 분포를 확인해 보세요',l:['우리 브랜드를 선호하는 고객의 연령대&성별을 알 수 있어요.','연령대 막대를 클릭해 보세요! 클릭한 연령대의 고객이 선호하는 상품을 [베스트 상품]과 [함께 많이 판매된 상품]에서 분석할 수 있어요.','타겟 고객 확장을 고려해 보세요. 우리 브랜드의 타겟 연령대가 3040이라면? 젊은 고객이 많은 인터넷·모바일 채널을 적극 활용해 보세요!']},
-  best:{t:'베스트 상품',h:'연령대별 주문 상위 상품을 확인해 보세요',l:['[연령대별 고객 수]의 막대를 클릭하면 연령대별 선호 상품을 확인하고 상품 판매·마케팅 전략을 세울 수 있어요.','숏헤드 vs 롱테일 관점의 상품 판매 분포를 확인해 보세요. 상위 1~2개 상품이 많이 팔렸는지 다양한 상품이 고르게 팔렸는지 알 수 있어요.']},
-  pair:{t:'함께 많이 판매된 상품',h:'조회 기간 동안 고객들이 함께 주문한 상품을 확인할 수 있어요',l:['함께 많이 팔린 상품들의 패턴을 찾아 보세요! A상품은 주문 고객수는 낮지만 함께 판매된 상품에는 많이 포함돼 있구나~ 재주문을 유도하는 타겟 마케팅 콘텐츠로 활용해 보세요.']},
-  age2:{t:'연령대별 고객 수 (첫구매·재구매)',h:'연령대별 첫주문 vs 재주문 고객 분포를 확인해 보세요',l:['연령대×주문유형별 고객 분포를 확인할 수 있어요.','연령대 막대를 클릭하면 그 연령대×주문유형 고객의 선호 상품을 [베스트 상품]과 [일자별 트렌드]에서 분석할 수 있어요.']},
-  best2:{t:'베스트 상품 (첫구매·재구매)',h:'연령대별 주문 상위 상품을 확인해 보세요',l:['[연령대별 고객 수] 차트의 막대를 클릭하면 연령대×주문유형별 선호 상품을 확인하고 상품 판매·마케팅 전략을 세울 수 있어요.','숏헤드 vs 롱테일 관점의 상품 판매 분포를 확인해 보세요. 상위 1~2개 상품이 많이 팔렸는지 다양한 상품이 고르게 팔렸는지 알 수 있어요.']},
-  apu:{t:'연령대별 객단가',h:'연령대별로 조회기간과 비교기간의 객단가를 비교해 보세요',l:['막대가 아래로 길수록 그 연령대의 객단가가 많이 줄었어요.','막대를 클릭하면 오른쪽 두 차트가 그 연령대 기준으로 바뀌어 객단가가 왜 바뀌었는지 볼 수 있어요.']},
-  ufreq:{t:'객단가 증감 요인 분석 (주문단가×빈도)',h:'객단가 = 주문단가 × 주문빈도. 무엇 때문에 객단가가 바뀌었는지 확인해 보세요',l:['조회기간 원이 비교기간 원보다 왼쪽이면 주문단가가, 아래쪽이면 주문빈도가 줄었어요.','예) 주문빈도는 조금 올랐지만 주문단가가 내려 객단가가 줄었다면, 고단가 상품 구성을 점검해 보세요.']},
-  uamt:{t:'주문금액 증감 요인 분석 (객단가×고객수)',h:'주문금액 = 객단가 × 고객수. 주문금액 변화의 원인을 나눠 보세요',l:['객단가가 줄어도 고객수가 늘면 주문금액은 늘 수 있어요.','원 위에 마우스를 올리면 기간별 주문금액을 볼 수 있어요.']},
-  rpos:{t:'브랜드 취반품 포지셔닝 (수량×취반품율)',h:'브랜드별로 조회기간과 비교기간의 취반품을 비교해 보세요',l:['위쪽일수록 취반품율이 높고, 오른쪽일수록 판매 수량이 많아요.','원을 클릭하면 그 브랜드 상품만 [상품별 취반품 현황]에 남아요.']},
-  rstat:{t:'상품별 취반품 현황',h:'취소·반품이 많은 상품과 그 사유를 확인해 보세요',l:['취소·반품 수량이 많은 상품부터 보여 줘요.','상품을 클릭하면 일자별 취반품 트렌드와 취소·반품 사유를 팝업으로 볼 수 있어요.']},
-  kwtrend:{t:'검색 유입 트렌드',h:'상품으로 유입된 검색량의 일자별 변화를 확인해 보세요',l:['상단의 외부·내부를 골라 검색 경로별 차이를 비교할 수 있어요.','Top10·Top20으로 상위 검색어만 모아 보거나, 검색어를 입력해 그 검색어의 추이만 볼 수 있어요.']},
-  kwcloud:{t:'검색어 분포',h:'검색량이 많은 상위 15개 검색어를 한눈에 확인해 보세요',l:['글자가 클수록 검색량이 많아요. 고객의 관심사를 상품명·광고 문구에 활용해 보세요.']},
-  kwtop:{t:'인기 검색어 TOP20',h:'검색량 상위 20개 검색어와 이전기간 대비 순위 변화를 확인해 보세요',l:['NEW는 이전기간에는 순위에 없던 검색어예요.']},
-  kwext:{t:'외부 검색 유입 상위 상품',h:'외부 검색으로 많이 들어온 상품을 확인해 보세요',l:['내부 검색 상위 상품과 비교해 외부 광고·마케팅에 활용해 보세요.']},
-  kwint:{t:'내부 검색 유입 상위 상품',h:'Hmall 안에서 검색해 많이 들어온 상품을 확인해 보세요',l:['외부 검색 상위 상품과 차이가 크다면, 그 상품의 외부 노출을 늘려 볼 수 있어요.']},
-  kwage:{t:'연령대별 검색량',h:'연령대별 외부·내부 검색량을 확인해 보세요',l:['검색이 많은 연령대를 기준으로 키워드 광고 대상을 정해 보세요.']},
-  cartst:{t:'장바구니 현황',h:'고객 장바구니에 담겨 있는 금액·고객수·수량을 확인해 보세요',l:['전일자 대비 증감을 함께 보여 줘요.','담겨 있는 상품의 일부만 판매해도 실적을 크게 높일 수 있어요.']},
-  cartp:{t:'상품별 장바구니 현황',h:'많이 담긴 상품을 확인하고 추가 세일즈를 시도해 보세요',l:['담긴 금액이 큰 상품부터 보여 줘요. 할인쿠폰·알림 등으로 구매를 유도해 보세요.']},
-  cartage:{t:'연령대별 고객 현황 (장바구니)',h:'연령대별 주문 고객과 장바구니 고객을 비교해 보세요',l:['장바구니 고객이 주문 고객보다 많은 연령대는 구매 전환 마케팅의 우선 대상이에요.']},
-  cartcat:{t:'함께 담겨 있는 상품 분류',h:'우리 상품과 함께 장바구니에 담긴 상품 분류를 확인해 보세요',l:['함께 담긴 분류를 묶음 기획·교차 판매 전략에 활용해 보세요.']},
-  dtrend:{t:'일자별 트렌드',h:'조회 기간 동안 일자별 주문 고객수 트렌드를 확인해 보세요',l:['특정 연령대×주문유형 고객의 주문이 집중된 기간이 있는지 확인할 수 있어요.']},
-  intrend:{t:'일자별 유입 트렌드',h:'조회기간 동안 브랜드의 일자별 유입 트렌드를 확인해 보세요',l:['브랜드별로 조회기간 동안의 유입 수 변화를 확인할 수 있어요. 마케팅 진행 기간 동안 유입 수에 변화가 있었는지 확인해 보세요.','특정 일자의 브랜드를 클릭하면 [유입채널 분포], [주문채널 분포], [상품 포지셔닝], [연령대별 유입 트렌드]에서 상세 정보를 볼 수 있어요.']},
-  inch:{t:'유입채널 분포',h:'조회기간 동안 유입채널의 분포를 확인해 보세요',l:['Hmall 채널은 App Push, LMS처럼 Hmall이 독자적으로 관리하는 마케팅 채널이에요. 외부 광고 채널은 가격비교, 배너광고, 검색광고 등 외부 마케팅 채널이에요. 고객이 직접 방문했으면 직접 방문이에요.','내 브랜드에 유입하는 고객이 주로 이용하는 채널을 확인하고 유입 전략을 세워 보세요.']},
-  odch:{t:'주문채널 분포',h:'조회기간 동안 주문채널의 분포를 확인해 보세요',l:['내 브랜드 상품을 주문하는 고객이 유입한 채널의 분포예요.','유입채널 분포와 비교하며 [유입 › 주문] 퍼널 관점의 전략을 세워 보세요!']},
-  pcvr:{t:'상품 포지셔닝 (유입×전환율)',h:'상품별 유입×전환 분포를 확인해 보세요',l:['우측&하단은 유입은 높은데 전환율이 낮다는 뜻이에요. 상세페이지·가격대를 체크해 보세요. 좌측&상단은 유입은 작은데 전환율이 높다는 뜻이니 유입을 높여 보세요. 주문금액이 클수록 원이 커져요.','원을 클릭하면 [연령대별 유입 트렌드]에서 어느 연령대의 전환율이 높은지 볼 수 있어요.']},
-  prev:{t:'상품 포지셔닝 (유입×재방문율)',h:'상품별 유입×재방문 분포를 확인해 보세요',l:['우측&상단인데 주문금액(원 크기)이 작다면 고객이 주문 전환을 많이 고민하는 상품이에요. 상세페이지·가격대를 체크해 보세요.']},
-  agein:{t:'연령대별 유입 트렌드',h:'조회기간 동안 연령대별 유입 트렌드를 확인해 보세요',l:['재방문율·전환율이 높은 연령대는 유입을 높이는 전략을, 유입은 많지만 재방문율·전환율이 낮은 연령대는 이탈 방지 전략을 세울 수 있어요.','※ 재방문율/전환율 선은 연령대 정보가 있는 고객만 집계한 값이라 실제보다 높게 보일 수 있어요. 트렌드 중심으로 보세요.']},
-  cmplist:{t:'비교 브랜드 리스트',h:'내 브랜드와 유사한 비교 브랜드를 선택하고 고객 & 상품 특징을 비교해 보세요! 실적 상승의 기회 요인을 찾아 볼 수 있어요!',l:['유사 브랜드는 조회기간 동안 내 브랜드의 주문금액을 기준으로 상위 7개, 하위 2개 브랜드가 나와요!','보고 싶은 상품분류와 해당 브랜드의 대표 연령대·가격대를 구체적으로 설정할 수도 있어요.','비교하고 싶은 브랜드를 클릭하면 오른쪽 [고객비교]와 [상품비교]에 함께 표시돼요. 내 브랜드는 보라색, 비교 브랜드는 하늘색이에요.']},
-  cmpcust:{t:'고객비교',h:'내 브랜드와 비교 브랜드의 고객이 어떻게 다른지 확인해 보세요!',l:['우리 브랜드가 타겟으로 설정한 연령대의 고객 반응이 비교 브랜드보다 좋네! 우리 브랜드의 연령대 전략이 잘 맞고 있군!','내가 선택한 상품분류에서 비교 브랜드들은 50대 고객수가 높게 나타나는구나! 50대 고객의 특징이 내 브랜드와 어떻게 다른지 [연령대별 고객 수]에서 확인해 보세요.']},
-  cmpprod:{t:'상품비교',h:'내 브랜드와 비교 브랜드의 상품 전략을 비교해 보세요!',l:['내 브랜드는 상위 몇 개 상품에서만 실적이 많이 나오는데 비교 브랜드는 다양한 상품에서 실적이 고르게 나오는구나~ 우리 브랜드의 상품 품목을 다양하게 해봐야겠다!','상품 가격대별 포지셔닝을 보니 고객수 관점에서 우리 브랜드가 저단가에서는 우위, 고단가에서는 열위에 있군~ 고단가 상품은 품목수도 적으니 고단가 상품의 품목을 늘려 봐야겠다!']},
-  topitem:{t:'TOP ITEM LIST',h:'조회기간의 상품별 실적과 고객 반응 지표를 확인해 보세요. 판매실적이 좋았던 Top 30 상품을 보여드려요!',l:['리뷰작성률은 프로모션의 영향을 고려해야 합니다.','상품을 선택하면 오른쪽과 아래 차트에서 그 상품의 고객 반응을 카테고리 평균과 비교해요.']},
-  react:{t:'고객 반응 지표 요약',h:'선택한 상품의 고객 반응 지표를 카테고리 평균과 한눈에 비교해 보세요. 자주 언급된 VoC·리뷰 키워드도 함께 보여드려요!',l:['카테고리 대비 반품·교환율이 높거나 4점 이상 리뷰가 적다면 고객이 불만족한 포인트일 수 있어요. 개선 방향을 찾아 구매 전환율을 높여 보세요.','반대로 반품·교환율이 양호하거나 리뷰 반응이 활발하다면 고객이 만족한 포인트일 수 있어요. 상품의 강점 및 소구 포인트로 활용해 보세요.']},
-  voc:{t:'고객불만 VoC 키워드 AI 분석',h:'반품·교환 사유로 자주 언급된 키워드를 확인하고 카테고리 평균과 비교해 보세요.',l:['키워드가 많다는 것은 그 자체로 부정적인 성격을 띠기도 하지만, 카테고리 특성을 고려해 비교 대상과 함께 보는 것이 중요해요!','비교 대상보다 빈도가 많은 키워드는 개선하고, 빈도가 적은 키워드는 강점으로 활용해 보세요.']},
-  review:{t:'긍/부정 리뷰 AI 키워드 분석',h:'긍/부정 리뷰 키워드를 확인하고 카테고리 평균과 비교해 보세요. 별점 4점 이상 리뷰는 긍정, 4점 미만 리뷰는 부정으로 분류합니다.',l:['긍정·부정 키워드가 모두 비교 대상보다 높으면 리뷰 반응이 활발한 상품이에요. 유독 많았던 키워드를 중심으로 특징을 살펴보세요.','긍정·부정 키워드가 모두 비교 대상보다 낮으면 리뷰 반응이 저조한 상품이에요. 더 많은 고객 반응을 얻는 데 집중해 보세요.','긍정 키워드만 높으면 고객이 만족한 포인트일 확률이 높아요. 강점으로 활용해 보세요.','부정 키워드만 높으면 고객이 불만족한 포인트일 확률이 높아요. 개선이 필요합니다.']},
-  taste:{t:'고객 취향 분석',h:'내 브랜드 핵심 고객을 한눈에 확인해 보세요.',l:['내 브랜드 고객들이 어떤 카테고리에 관심이 있는지, 프로파일과 행동 특징까지 쉽게 알 수 있어요.','카테고리 카드를 클릭하면 해당 카테고리 고객의 프로파일 및 행동 특징은 물론, 가망고객 규모까지 확인할 수 있어요. 내가 타겟하고 싶은 고객을 더 정확히 이해하고 판매 전략에 활용해 보세요!']},
-  prospect:{t:'가망 고객 분석',h:'지금 바로 내 브랜드에 관심이 있을 만한 고객을 확인해 보세요.',l:['내 브랜드를 구매할 가능성이 높은 고객 규모를 확인해 보세요.','내 브랜드 관심고객은 충성고객으로, 그 외 고객에게는 내 브랜드를 알려 새로운 고객을 늘려 보세요.','① 내 브랜드 관심고객: 내 브랜드를 주문·클릭·조회한 고객 ② 유사 상품군 관심고객: 내 브랜드와 속성이 유사한 상품군을 가진 브랜드를 주문·클릭·조회한 고객 ③ 연관 브랜드 관심고객: 내 브랜드와 연관성이 높은 브랜드를 주문·클릭·조회한 고객(카테고리 경계를 넘어 브랜드 간 유사도 분석 모델로 도출)']},
-  rule:{t:'집계 기준',h:'비즈니스 인사이트의 모든 실적은 아래 기준으로 집계돼요.',l:['순주문: 주문 후 14일 이내 발생한 취소·반품을 반영한 주문 / 총주문: 취소·반품을 반영하지 않은 전체 주문','모든 금액은 부가세를 제외한 금액이에요.','고객수와 객단가는 대량 구매·리셀러 고객을 제외한 값이에요.','첫주문/재주문: 최근 1년 안에 주문 이력이 있으면 재주문, 없으면 첫주문 고객으로 분류해요.']},
-  gen:{t:'분석 TIP',h:'조회 조건을 바꾸면 차트와 표가 함께 바뀌어요.',l:['차트 위에 마우스를 올리면 값을 확인할 수 있어요.']}
+  bpos:{t:'브랜드 포지셔닝 (단가×수량)',h:'조회기간 vs 비교기간의 브랜드 실적을 한눈에 비교합니다.',l:['판매 실적 증감의 원인을 브랜드 단위로 확인할 수 있습니다. 비교기간 대비 어느 브랜드의 영향이 컸는지, 어느 브랜드의 주문금액이 줄었는지가 원 크기의 변화로 나타납니다.','브랜드 실적 증감의 원인을 상품 단가×수량 단위로 확인할 수 있습니다. 단가는 낮아졌으나 주문수량이 늘어 실적이 증가한 경우를 구분할 수 있습니다.','브랜드 원을 클릭하면 [상품별 현황]과 [상품 포지셔닝]에서 해당 브랜드 상품의 세부 데이터를 확인할 수 있습니다.']},
+  pstat:{t:'상품별 현황',h:'주문이 많았던 상품을 확인합니다.',l:['왼쪽 [브랜드 포지셔닝]에서 원을 클릭하면 해당 브랜드의 상품만 표시됩니다.','상품명을 더블 클릭하면 상품 세부 실적과 주문 고객 프로파일을 확인할 수 있습니다.']},
+  ppos:{t:'상품 포지셔닝 (단가×수량)',h:'주문금액 증감의 원인을 상품 단가×수량 단위로 분석합니다.',l:['원의 분포로 주문금액 증감 원인을 확인합니다. 비교기간에는 고단가 상품이, 조회기간에는 저단가 상품이 주력이었는지 등 주력 가격대의 이동을 파악할 수 있습니다.','상품 단가 전략의 효과를 확인할 수 있습니다. 단가를 낮춘 만큼 주문수량이 늘었는지 함께 보시기 바랍니다.']},
+  agec:{t:'연령대별 고객 수',h:'내 브랜드와 Hmall TV홈쇼핑·인터넷/모바일의 고객 연령 분포를 비교합니다.',l:['내 브랜드를 선호하는 고객의 연령대와 성별을 확인할 수 있습니다.','연령대 막대를 클릭하면 해당 연령대 고객이 선호하는 상품을 [베스트 상품]과 [함께 많이 판매된 상품]에서 분석할 수 있습니다.','타겟 고객 확장에 참고할 수 있습니다. 내 브랜드의 주 연령대가 30~40대라면 젊은 고객 비중이 높은 인터넷·모바일 채널의 활용을 검토할 수 있습니다.']},
+  best:{t:'베스트 상품',h:'연령대별 주문 상위 상품을 확인합니다.',l:['[연령대별 고객 수]의 막대를 클릭하면 연령대별 선호 상품을 확인하고 상품 판매·마케팅 전략에 활용할 수 있습니다.','숏헤드 vs 롱테일 관점의 상품 판매 분포를 확인합니다. 상품명 칸의 게이지로 상위 1~2개 상품에 판매가 집중됐는지, 다양한 상품이 고르게 팔렸는지 알 수 있습니다.']},
+  pair:{t:'함께 많이 판매된 상품',h:'조회기간 동안 고객이 함께 주문한 상품 조합을 확인합니다.',l:['함께 많이 팔린 상품의 패턴을 파악합니다. 주문 고객수는 적지만 함께 판매된 조합에 자주 포함되는 상품은 재주문을 유도하는 타겟 마케팅 콘텐츠로 활용할 수 있습니다.']},
+  age2:{t:'연령대별 고객 수 (첫구매·재구매)',h:'연령대별 첫주문 vs 재주문 고객 분포를 확인합니다.',l:['연령대×주문유형별 고객 분포를 확인할 수 있습니다.','연령대 막대를 클릭하면 해당 연령대×주문유형 고객의 선호 상품을 [베스트 상품]과 [일자별 트렌드]에서 분석할 수 있습니다.']},
+  best2:{t:'베스트 상품 (첫구매·재구매)',h:'연령대별 주문 상위 상품을 확인합니다.',l:['[연령대별 고객 수] 차트의 막대를 클릭하면 연령대×주문유형별 선호 상품을 확인하고 상품 판매·마케팅 전략에 활용할 수 있습니다.','숏헤드 vs 롱테일 관점의 상품 판매 분포를 확인합니다. 상품명 칸의 게이지로 상위 1~2개 상품에 판매가 집중됐는지, 다양한 상품이 고르게 팔렸는지 알 수 있습니다.']},
+  apu:{t:'연령대별 객단가',h:'연령대별로 조회기간과 비교기간의 객단가를 비교합니다.',l:['막대가 아래로 길수록 해당 연령대의 객단가 감소 폭이 큽니다.','막대를 클릭하면 오른쪽 두 차트가 해당 연령대 기준으로 바뀌어 객단가 변화의 원인을 확인할 수 있습니다.']},
+  ufreq:{t:'객단가 증감 요인 분석 (주문단가×빈도)',h:'객단가 = 주문단가 × 주문빈도. 객단가 변화의 요인을 확인합니다.',l:['조회기간 원이 비교기간 원보다 왼쪽에 있으면 주문단가가, 아래쪽에 있으면 주문빈도가 감소한 것입니다.','주문빈도는 소폭 상승했으나 주문단가가 하락해 객단가가 줄었다면 고단가 상품 구성을 점검할 필요가 있습니다.']},
+  uamt:{t:'주문금액 증감 요인 분석 (객단가×고객수)',h:'주문금액 = 객단가 × 고객수. 주문금액 변화의 요인을 나누어 확인합니다.',l:['객단가가 감소해도 고객수가 증가하면 주문금액은 늘어날 수 있습니다.','원 위에 마우스를 올리면 기간별 주문금액을 확인할 수 있습니다.']},
+  rpos:{t:'브랜드 취반품 포지셔닝 (수량×취반품율)',h:'브랜드별로 조회기간과 비교기간의 취반품을 비교합니다.',l:['위쪽일수록 취반품율이 높고, 오른쪽일수록 판매 수량이 많습니다.','원을 클릭하면 [상품별 취반품 현황]에 해당 브랜드 상품만 표시됩니다.']},
+  rstat:{t:'상품별 취반품 현황',h:'취소·반품이 많은 상품과 그 사유를 확인합니다.',l:['취소·반품 수량이 많은 상품부터 표시합니다.','상품을 클릭하면 일자별 취반품 트렌드와 취소·반품 사유를 팝업에서 확인할 수 있습니다.']},
+  kwtrend:{t:'검색 유입 트렌드',h:'상품으로 유입된 검색량의 일자별 변화를 확인합니다.',l:['상단의 외부·내부를 선택해 검색 경로별 차이를 비교할 수 있습니다.','Top10·Top20으로 상위 검색어만 모아 보거나, 검색어를 입력해 해당 검색어의 추이만 볼 수 있습니다.']},
+  kwcloud:{t:'검색어 분포',h:'검색량이 많은 상위 15개 검색어를 확인합니다.',l:['글자가 클수록 검색량이 많습니다. 고객의 관심사를 상품명·광고 문구에 반영할 수 있습니다.']},
+  kwtop:{t:'인기 검색어 TOP20',h:'검색량 상위 20개 검색어와 이전기간 대비 순위 변화를 확인합니다.',l:['NEW는 이전기간 순위에 없던 검색어입니다.']},
+  kwext:{t:'외부 검색 유입 상위 상품',h:'외부 검색을 통해 유입이 많았던 상품을 확인합니다.',l:['내부 검색 상위 상품과 비교해 외부 광고·마케팅 대상 선정에 활용할 수 있습니다.']},
+  kwint:{t:'내부 검색 유입 상위 상품',h:'Hmall 내부 검색을 통해 유입이 많았던 상품을 확인합니다.',l:['외부 검색 상위 상품과 차이가 크다면 해당 상품의 외부 노출 확대를 검토할 수 있습니다.']},
+  kwage:{t:'연령대별 검색량',h:'연령대별 외부·내부 검색량을 확인합니다.',l:['검색이 많은 연령대를 기준으로 키워드 광고 대상을 정할 수 있습니다.']},
+  cartst:{t:'장바구니 현황',h:'고객 장바구니에 담겨 있는 금액·고객수·수량을 확인합니다.',l:['전일 대비 증감을 함께 표시합니다.','담겨 있는 상품의 일부만 판매해도 실적에 기여하는 규모를 확인할 수 있습니다.']},
+  cartp:{t:'상품별 장바구니 현황',h:'많이 담긴 상품을 확인하고 추가 판매 기회를 찾습니다.',l:['담긴 금액이 큰 상품부터 표시합니다. 할인쿠폰·알림 등으로 구매 전환을 유도할 수 있습니다.']},
+  cartage:{t:'연령대별 고객 현황 (장바구니)',h:'연령대별 주문 고객과 장바구니 고객을 비교합니다.',l:['장바구니 고객이 주문 고객보다 많은 연령대는 구매 전환 마케팅의 우선 대상입니다.']},
+  cartcat:{t:'함께 담겨 있는 상품 분류',h:'내 상품과 함께 장바구니에 담긴 상품 분류를 확인합니다.',l:['함께 담긴 분류를 묶음 기획·교차 판매 전략에 활용할 수 있습니다.']},
+  dtrend:{t:'일자별 트렌드',h:'조회기간 동안 일자별 주문 고객수 추이를 확인합니다.',l:['특정 연령대×주문유형 고객의 주문이 집중된 기간이 있는지 확인할 수 있습니다.']},
+  intrend:{t:'일자별 유입 트렌드',h:'조회기간 동안 브랜드의 일자별 유입 추이를 확인합니다.',l:['브랜드별 유입 수의 변화를 확인할 수 있습니다. 마케팅 진행 기간에 유입 수가 어떻게 달라졌는지 비교해 보시기 바랍니다.','막대 위에 마우스를 올리면 해당 일자의 브랜드별 유입 수와 주문 고객수를 확인할 수 있습니다.']},
+  inch:{t:'유입채널 분포',h:'조회기간 동안 유입채널의 분포를 확인합니다.',l:['Hmall 채널은 App Push, LMS 등 Hmall이 직접 운영하는 마케팅 채널입니다. 외부 광고는 가격비교, 배너 광고, 검색 광고 등 외부 마케팅 채널이며, 고객이 직접 접속한 경우는 직접 방문으로 분류합니다.','내 브랜드 유입 고객이 주로 이용하는 채널을 확인해 유입 전략에 반영할 수 있습니다.']},
+  odch:{t:'주문채널 분포',h:'조회기간 동안 주문채널의 분포를 확인합니다.',l:['내 브랜드 상품을 주문한 고객이 유입된 채널의 분포입니다.','유입채널 분포와 비교해 [유입 › 주문] 퍼널 관점의 전략을 세울 수 있습니다.']},
+  pcvr:{t:'상품 포지셔닝 (유입×전환율)',h:'상품별 유입×전환율 분포를 확인합니다.',l:['오른쪽 아래는 유입은 많으나 전환율이 낮은 상품입니다. 상세페이지와 가격대를 점검할 필요가 있습니다. 왼쪽 위는 유입은 적으나 전환율이 높은 상품이므로 유입 확대를 검토할 수 있습니다. 주문금액이 클수록 원이 큽니다.','원을 클릭하면 [연령대별 유입 트렌드]에서 어느 연령대의 전환율이 높은지 확인할 수 있습니다.']},
+  prev:{t:'상품 포지셔닝 (유입×재방문율)',h:'상품별 유입×재방문율 분포를 확인합니다.',l:['오른쪽 위에 있으나 주문금액(원 크기)이 작은 상품은 고객이 구매를 망설이는 상품입니다. 상세페이지와 가격대를 점검할 필요가 있습니다.']},
+  agein:{t:'연령대별 유입 트렌드',h:'조회기간 동안 연령대별 유입 추이를 확인합니다.',l:['재방문율·전환율이 높은 연령대는 유입 확대 전략을, 유입은 많으나 재방문율·전환율이 낮은 연령대는 이탈 방지 전략을 검토할 수 있습니다.','재방문율·전환율 선은 연령대 정보가 있는 고객만 집계한 값이므로 실제보다 높게 보일 수 있습니다. 추세 중심으로 해석하시기 바랍니다.']},
+  cmplist:{t:'비교 브랜드 리스트',h:'내 브랜드와 유사한 비교 브랜드를 선택해 고객·상품 특징을 비교하고, 실적 상승의 기회 요인을 찾습니다.',l:['유사 브랜드는 조회기간 동안 내 브랜드의 주문금액을 기준으로 상위 7개, 하위 2개 브랜드를 표시합니다.','상품분류와 해당 브랜드의 대표 연령대·가격대를 지정해 비교 대상을 좁힐 수 있습니다.','비교할 브랜드를 클릭하면 오른쪽 [고객비교]와 [상품비교]에 함께 표시됩니다. 내 브랜드는 보라색, 비교 브랜드는 하늘색입니다.']},
+  cmpcust:{t:'고객비교',h:'내 브랜드와 비교 브랜드의 고객 차이를 확인합니다.',l:['내 브랜드가 타겟으로 설정한 연령대의 고객 반응이 비교 브랜드보다 높다면 연령대 전략이 유효하다고 볼 수 있습니다.','선택한 상품분류에서 비교 브랜드의 특정 연령대 고객수가 높게 나타난다면, 해당 연령대 고객의 특징이 내 브랜드와 어떻게 다른지 [연령대별 고객 수]에서 확인할 수 있습니다.']},
+  cmpprod:{t:'상품비교',h:'내 브랜드와 비교 브랜드의 상품 전략을 비교합니다.',l:['내 브랜드는 상위 일부 상품에 실적이 집중되는 반면 비교 브랜드는 다양한 상품에서 실적이 고르게 나온다면, 상품 품목의 다양화를 검토할 수 있습니다.','가격대별 포지셔닝에서 고객수 기준으로 내 브랜드가 저단가에서는 우위, 고단가에서는 열위에 있고 고단가 품목수도 적다면, 고단가 상품의 품목 확대를 검토할 수 있습니다.']},
+  topitem:{t:'TOP ITEM LIST',h:'조회기간의 상품별 실적과 고객 반응 지표를 확인합니다. 판매실적 상위 30개 상품을 표시합니다.',l:['리뷰작성률은 프로모션의 영향을 고려해 해석해야 합니다.','상품을 선택하면 오른쪽과 아래 차트에서 해당 상품의 고객 반응을 카테고리 평균과 비교합니다.']},
+  react:{t:'고객 반응 지표 요약',h:'선택한 상품의 고객 반응 지표를 카테고리 평균과 비교합니다. 자주 언급된 VoC·리뷰 키워드를 함께 표시합니다.',l:['카테고리 대비 반품·교환율이 높거나 4점 이상 리뷰가 적다면 고객이 불만족한 지점일 수 있습니다. 개선 방향을 찾아 구매 전환율을 높이는 데 활용할 수 있습니다.','반대로 반품·교환율이 양호하거나 리뷰 반응이 활발하다면 고객이 만족한 지점일 수 있습니다. 상품의 강점과 소구 포인트로 활용할 수 있습니다.']},
+  voc:{t:'고객불만 VoC 키워드 AI 분석',h:'반품·교환 사유로 자주 언급된 키워드를 확인하고 카테고리 평균과 비교합니다.',l:['키워드 빈도가 높다는 것은 부정적 신호일 수 있으나, 카테고리 특성을 고려해 비교 대상과 함께 해석해야 합니다.','비교 대상보다 빈도가 높은 키워드는 개선 과제로, 빈도가 낮은 키워드는 강점으로 활용할 수 있습니다.']},
+  review:{t:'긍/부정 리뷰 AI 키워드 분석',h:'긍/부정 리뷰 키워드를 확인하고 카테고리 평균과 비교합니다. 별점 4점 이상 리뷰는 긍정, 4점 미만 리뷰는 부정으로 분류합니다.',l:['긍정·부정 키워드가 모두 비교 대상보다 높으면 리뷰 반응이 활발한 상품입니다. 특히 많이 언급된 키워드를 중심으로 특징을 파악합니다.','긍정·부정 키워드가 모두 비교 대상보다 낮으면 리뷰 반응이 저조한 상품입니다. 고객 반응을 늘리는 활동이 필요합니다.','긍정 키워드만 높으면 고객이 만족한 지점일 가능성이 높으므로 강점으로 활용할 수 있습니다.','부정 키워드만 높으면 고객이 불만족한 지점일 가능성이 높으므로 개선이 필요합니다.']},
+  taste:{t:'고객 취향 분석',h:'내 브랜드의 핵심 고객을 확인합니다.',l:['내 브랜드 고객이 관심을 두는 카테고리와 프로파일, 행동 특징을 확인할 수 있습니다.','카테고리 카드를 클릭하면 해당 카테고리 고객의 프로파일과 행동 특징, 가망고객 규모를 확인할 수 있습니다. 타겟 고객을 구체적으로 이해하고 판매 전략에 반영하는 데 활용합니다.']},
+  prospect:{t:'가망 고객 분석',h:'현재 내 브랜드에 관심을 가질 가능성이 높은 고객을 확인합니다.',l:['내 브랜드를 구매할 가능성이 높은 고객 규모를 확인할 수 있습니다.','내 브랜드 관심고객은 충성고객으로 관리하고, 그 외 고객에게는 내 브랜드를 알려 신규 고객을 확보하는 전략에 활용합니다.','① 내 브랜드 관심고객: 내 브랜드를 주문·클릭·조회한 고객 ② 유사 상품군 관심고객: 내 브랜드와 속성이 유사한 상품군을 가진 브랜드를 주문·클릭·조회한 고객 ③ 연관 브랜드 관심고객: 내 브랜드와 연관성이 높은 브랜드를 주문·클릭·조회한 고객(카테고리 경계를 넘어 브랜드 간 유사도 분석 모델로 도출)']},
+  rule:{t:'집계 기준',h:'비즈니스 인사이트의 모든 실적은 아래 기준으로 집계합니다.',l:['순주문: 주문 후 14일 이내 발생한 취소·반품을 반영한 주문 / 총주문: 취소·반품을 반영하지 않은 전체 주문','모든 금액은 부가세를 제외한 금액입니다.','고객수와 객단가는 대량 구매·리셀러 고객을 제외한 값입니다.','첫주문/재주문: 최근 1년 안에 주문 이력이 있으면 재주문, 없으면 첫주문 고객으로 분류합니다.']},
+  gen:{t:'분석 TIP',h:'조회 조건을 바꾸면 차트와 표가 함께 바뀝니다.',l:['차트 위에 마우스를 올리면 값을 확인할 수 있습니다.']}
 };
-function tipBtn(key){const t=TIPS[key]||TIPS.gen;return `<span class="tip"><button type="button" class="btn pill" data-tip="${key}">분석 TIP</button>${state.tip===key?`<div class="tipbox"><h4>${esc(t.t)}</h4><div>${esc(t.h)}</div><div class="b" style="margin-top:6px">이런 분석이 가능해요!</div><ul>${t.l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}</span>`;}
+
+function tipBtn(key){const t=TIPS[key]||TIPS.gen;return `<span class="tip"><button type="button" class="btn pill" data-tip="${key}">분석 TIP</button>${state.tip===key?`<div class="tipbox"><h4>${esc(t.t)}</h4><div>${esc(t.h)}</div><div class="b" style="margin-top:6px">활용 방법</div><ul>${t.l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}</span>`;}
 const panel=(title,body,tip,extra)=>`<div class="panel"><div class="ph">${esc(title)}${tip?tipBtn(tip):(extra||'')}</div><div class="pb">${body}</div></div>`;
 const emptyBox=msg=>`<div class="empty"><span class="i">!</span>${esc(msg||'데이터가 존재하지 않습니다.')}</div>`;
 
@@ -943,7 +959,7 @@ function renderHome(){const E=id=>document.getElementById(id);E('homeCards').inn
 
 /* ---------- 비즈니스 인사이트 ---------- */
 function brandSel(id){return `<select class="sel" data-f="brand" aria-label="브랜드명(코드)"><option value="">전체 선택</option>${BRANDS.map(b=>`<option value="${b.name}"${state.brand===b.name?' selected':''}>${b.name} (${b.code})</option>`).join('')}</select>`;}
-const netRadio=()=>`<label class="radio"><input type="radio" name="net" data-f="net" value="1"${state.net?' checked':''}>순주문</label><label class="radio"><input type="radio" name="net" data-f="net" value="0"${!state.net?' checked':''}>총주문</label>`;
+const netRadio=()=>`<span class="radios"><label class="radio"><input type="radio" name="net" data-f="net" value="1"${state.net?' checked':''}>순주문</label><label class="radio"><input type="radio" name="net" data-f="net" value="0"${!state.net?' checked':''}>총주문</label></span>`;
 const dateInp=(f,v)=>`<input type="date" class="inp date" data-f="${f}" value="${v}" min="${DATA_MIN}" max="${DATA_MAX}">`;
 function ruleBtn(){const t=TIPS.rule;return `<span class="tip" style="margin-left:auto"><button type="button" class="btn sm" data-tip="rule">ⓘ 집계 기준</button>${state.tip==='rule'?`<div class="tipbox"><h4>${esc(t.t)}</h4><div>${esc(t.h)}</div><ul>${t.l.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`:''}</span>`;}
 const monthInp=(f,v)=>`<input type="month" class="inp date" data-f="${f}" value="${v}" min="${DATA_MIN.slice(0,7)}" max="${DATA_MAX.slice(0,7)}">`;
@@ -958,8 +974,8 @@ function biFilterHTML(){const r=range(state.period),c=range(state.cmp);const seg
     case 'ai':return `<span class="lab">조회기간</span>${seg}${perInputs(r)}<span class="lab">브랜드명(코드)</span>${brandSel()}<span class="lab">상품 분류</span><select class="sel" data-f="cat1">${Object.keys(CAT_TREE).map(c=>`<option${state.cat1===c?' selected':''}>${c}</option>`).join('')}</select><select class="sel" data-f="cat2"><option value="">전체</option>${(CAT_TREE[state.cat1]||[]).map(c=>`<option${state.cat2===c?' selected':''}>${c}</option>`).join('')}</select><button type="button" class="btn outline" data-f="go">조회</button>`;
     case 'prospect':return `<span class="lab">브랜드명</span><select class="sel" data-f="pbrand">${BRANDS.map(b=>`<option value="${b.name}"${state.pbrand===b.name?' selected':''}>${b.name}</option>`).join('')}</select><button type="button" class="btn outline" data-f="go">조회</button>`;}
   return '';}
-const BI_NOTE={daily:'',sales:'Hmall의 다양한 판매 채널을 통해 실적을 높여 보세요!',inflow:'[유입 ▶ 검색 ▶ 주문]의 퍼널 관점으로 상품을 분석하고 전략을 세워 보세요!',compare:'비교 분석은 브랜드 단위로 가능합니다. 내 브랜드와 유사한 카테고리의 상위 브랜드를 비교하고 전략을 세워 보세요!',ai:'조회 기간 내 주문된 상품 중 판매량 상위 상품이 TOP ITEM LIST에 표시됩니다. 상품을 선택하여 동일 카테고리의 고객 반응과 비교해 보세요.',prospect:'브랜드 고객의 다양한 상품 취향을 분석하여, 주문 가능성이 높은 가망 고객 규모를 산정하였습니다! 광고센터를 통해 Hmall 고객에게 내 브랜드를 알려 보세요!'};
-function renderBi(){const E=id=>document.getElementById(id);E('biTabs').innerHTML=BI_TABS.map(([k,l])=>`<button type="button" data-bt="${k}" aria-pressed="${state.bt===k}">${l}</button>`).join('');
+const BI_NOTE={daily:'',sales:'Hmall의 여러 판매 채널별 실적 추이를 비교해 실적 개선 방향을 찾을 수 있습니다.',inflow:'[유입 ▶ 검색 ▶ 주문] 퍼널 관점으로 상품을 분석하고 전략을 수립할 수 있습니다.',compare:'비교 분석은 브랜드 단위로 제공됩니다. 내 브랜드와 유사한 카테고리의 상위 브랜드를 비교하고 전략을 수립할 수 있습니다.',ai:'조회 기간 내 주문된 상품 중 판매량 상위 상품이 TOP ITEM LIST에 표시됩니다. 상품을 선택하여 동일 카테고리의 고객 반응과 비교해 보세요.',prospect:'브랜드 고객의 상품 취향을 분석해 주문 가능성이 높은 가망 고객 규모를 산정했습니다. 광고센터를 통해 Hmall 고객에게 내 브랜드를 알릴 수 있습니다.'};
+function renderBi(){const E=id=>document.getElementById(id);const bt=BI_TABS.find(t=>t[0]===state.bt)||BI_TABS[0];E('biHead').innerHTML=`<span class="crumb">${esc(VIEW_TITLE.bi)} ›</span><h1>${esc(bt[1])}</h1>`;
   E('biFilter').innerHTML=biFilterHTML();E('biNote').innerHTML=BI_NOTE[state.bt]?`<span class="i">○</span>${esc(BI_NOTE[state.bt])}`:'';E('biNote').hidden=!BI_NOTE[state.bt];
   E('biBody').innerHTML={daily:biDaily,sales:biSales,inflow:biInflow,compare:biCompare,ai:biAi,prospect:biProspect}[state.bt]();}
 /* 데일리 요약 */
@@ -1322,8 +1338,8 @@ function renderGuide(){document.getElementById('guideBody').innerHTML=`
 <h2>주소 공유</h2><p>주소창의 주소(# 뒤 포함)를 복사해 공유하면 지금 보는 화면·기간·필터가 그대로 열립니다.</p>`;}
 
 /* ---------- 링크 상태 ---------- */
-const HASH_KEYS=[['v','view'],['bt','bt'],['st','st'],['it','it'],['d','date'],['p','period'],['cp','cmp'],['b','brand'],['net','net'],['pm','pmode'],['bs','bsel'],['ag','age'],['ot','otype'],['kx','kwExt'],['ki','kwIn'],['kt','kwTop'],['c1','cat1'],['c2','cat2'],['ai','ai'],['pb','pbrand'],['em','ecMd'],['ec','ecCh'],['es','ecSt'],['sel','ecSel'],['afs','afSt'],['afl','afSel'],['ass','asSt'],['asl','asSel'],['om','odMode'],['op','op'],['sm','srMode'],['sp','sp'],['sty','srType'],['src','srCode'],['bp','bp'],['bu','bu'],['tp','tp'],['tc','tc'],['tu','tu'],['yp','yp'],['yc','yc'],['sc','scope'],['mt','metric'],['cb','cb'],['pc','pcat'],['prp','prp'],['prs','prSt'],['prl','prSel'],['cm','cm'],['pa','pa'],['fa','fa']];
-const BOOL_KEYS={net:1,kwExt:1,kwIn:1};
+const HASH_KEYS=[['v','view'],['bt','bt'],['st','st'],['it','it'],['d','date'],['p','period'],['cp','cmp'],['b','brand'],['net','net'],['pm','pmode'],['bs','bsel'],['ag','age'],['ot','otype'],['kx','kwExt'],['ki','kwIn'],['kt','kwTop'],['c1','cat1'],['c2','cat2'],['ai','ai'],['pb','pbrand'],['em','ecMd'],['ec','ecCh'],['es','ecSt'],['sel','ecSel'],['afs','afSt'],['afl','afSel'],['ass','asSt'],['asl','asSel'],['om','odMode'],['op','op'],['sm','srMode'],['sp','sp'],['sty','srType'],['src','srCode'],['bp','bp'],['bu','bu'],['tp','tp'],['tc','tc'],['tu','tu'],['yp','yp'],['yc','yc'],['sc','scope'],['mt','metric'],['cb','cb'],['pc','pcat'],['prp','prp'],['prs','prSt'],['prl','prSel'],['cm','cm'],['pa','pa'],['fa','fa'],['nh','navOff']];
+const BOOL_KEYS={net:1,kwExt:1,kwIn:1,navOff:1};
 function serialize(){const q=[];for(const [k,s] of HASH_KEYS){let v=state[s];const d=DEFAULTS[s];if(v===undefined||v===d||(v===''&&d===undefined))continue;if(BOOL_KEYS[s])v=v?1:0;q.push(k+'='+encodeURIComponent(String(v)).replace(/%20/g,'+'));}return q.join('&');}
 function parseHash(h){const out={};const q=(h||'').replace(/^#/,'');if(!q)return Object.assign(out,DEFAULTS);const sp=new URLSearchParams(q);const g=(k)=>sp.has(k)?sp.get(k):null;
   for(const [k,s] of HASH_KEYS){const raw=g(k);let v=DEFAULTS[s];if(raw!==null){
@@ -1347,8 +1363,10 @@ function openTab(v){if(!state.tabs.includes(v))state.tabs.push(v);}
 function go(v,extra){Object.assign(state,extra||{});state.view=v;state.tip='';state.modal='';openTab(v);render(true);}
 function render(push){const E=id=>document.getElementById(id);
   document.querySelectorAll('.view').forEach(s=>{s.hidden=s.id!=='view-'+state.view;});
-  document.querySelectorAll('.nav button[data-view]').forEach(b=>{const cur=b.dataset.view===state.view&&(b.dataset.view!=='scope'||b.dataset.scope===state.scope);if(cur)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
-  E('tabBar').innerHTML=`<button type="button" class="home" data-go="home" title="홈">🏠</button>`+state.tabs.filter(v=>v!=='home').map(v=>`<button type="button" class="tab${v===state.view?' on':''}" data-go="${v}"><span class="star">☆</span>${esc(VIEW_TITLE[v])}<span class="x" data-close="${v}" title="닫기">✕</span></button>`).join('');
+  document.querySelectorAll('.nav button[data-view]').forEach(b=>{const cur=b.dataset.view===state.view&&(b.dataset.view!=='scope'||b.dataset.scope===state.scope)&&(!b.dataset.bt||b.dataset.bt===state.bt);if(cur)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});
+  /* 왼쪽 메뉴 숨기기: 본문을 전체 폭으로 */
+  {const app=E('app'),tg=E('navToggle');if(state.navOff)app.classList.add('navoff');else app.classList.remove('navoff');tg.setAttribute('aria-expanded',String(!state.navOff));tg.setAttribute('title',state.navOff?'메뉴 보이기':'메뉴 숨기기');}
+  E('tabBar').innerHTML=`<button type="button" class="home" data-go="home" title="홈">🏠</button>`+state.tabs.filter(v=>v!=='home').map(v=>`<button type="button" class="tab${v===state.view?' on':''}" data-go="${v}"><span class="star">☆</span>${esc(VIEW_TITLE[v])}<span class="x" data-close="${v}" title="탭 닫기">✕</span></button>`).join('');
   E('acct').textContent='👤 '+VENDOR.code+' | '+VENDOR.user+' ▾';
   E('menuList').innerHTML=VIEWS.filter(v=>v!=='scope').map(v=>`<option value="${esc(VIEW_TITLE[v])}">`).join('');
   document.title=VIEW_TITLE[state.view]+' · '+APP.name;
@@ -1359,9 +1377,10 @@ function render(push){const E=id=>document.getElementById(id);
 function on(id,type,sel,fn){document.getElementById(id).addEventListener(type,e=>{let t=e.target;while(t&&t!==e.currentTarget){if(t.matches&&t.matches(sel)){fn(t,e);return;}t=t.parentNode;}});}
 const E0=id=>document.getElementById(id);
 on('nav','click','button.grp',b=>{const g=b.dataset.grp;state.open[g]=!state.open[g];b.setAttribute('aria-expanded',String(state.open[g]));document.querySelectorAll('.nav .sub').forEach(s=>{if(s.dataset.grp===g)s.classList.toggle('open');});});
-on('nav','click','button.item',b=>{go(b.dataset.view,b.dataset.view==='scope'?{scope:b.dataset.scope}:{});});
-on('tabBar','click','[data-close]',(b,e)=>{e.stopPropagation&&e.stopPropagation();const v=b.dataset.close;state.tabs=state.tabs.filter(x=>x!==v);if(state.view===v){state.view=state.tabs[state.tabs.length-1]||'home';}render(true);});
-on('tabBar','click','[data-go]',b=>{if(b.dataset.go)go(b.dataset.go);});
+on('nav','click','button.item',b=>{go(b.dataset.view,b.dataset.view==='scope'?{scope:b.dataset.scope}:b.dataset.bt?{bt:b.dataset.bt}:{});});
+E0('navToggle').addEventListener('click',()=>{state.navOff=!state.navOff;render();});
+/* 탭 닫기(✕)와 탭 열기는 한 리스너에서 가른다. 따로 두면 ✕ 클릭이 부모 탭 버튼의 열기까지 타고 올라가 닫은 탭이 바로 다시 열린다 */
+on('tabBar','click','[data-close],[data-go]',b=>{if(b.dataset.close!==undefined){const v=b.dataset.close;state.tabs=state.tabs.filter(x=>x!==v);if(state.view===v){state.view=state.tabs[state.tabs.length-1]||'home';}render(true);}else if(b.dataset.go)go(b.dataset.go);});
 E0('saveHtml').addEventListener('click',saveHtml);
 E0('btnMd').addEventListener('click',()=>toast('담당 MD: '+VENDOR.md.name+' ('+VENDOR.md.team+', '+VENDOR.md.code+')'));
 E0('btnManual').addEventListener('click',()=>go('guide'));
@@ -1457,6 +1476,6 @@ window.addEventListener('hashchange',()=>{applyHash();openTab(state.view);render
 applyHash();openTab(state.view);
 render();})();
 </script>
-<!-- 공개용 게시본 v1.2 (2026-10-30) -->
+<!-- 공개용 게시본 v1.3 (2026-10-30) -->
 </body>
 </html>
